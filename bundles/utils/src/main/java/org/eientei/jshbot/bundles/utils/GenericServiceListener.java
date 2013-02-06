@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.utils;
+package org.eientei.jshbot.bundles.utils;
 
 import org.osgi.framework.*;
 

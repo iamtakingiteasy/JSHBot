@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.router;
+package org.eientei.jshbot.bundles.router;
 
 /**
  * Created with IntelliJ IDEA.

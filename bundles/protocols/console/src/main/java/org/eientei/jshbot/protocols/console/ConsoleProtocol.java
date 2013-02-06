@@ -1,14 +1,14 @@
 package org.eientei.jshbot.protocols.console;
 
 import jline.console.ConsoleReader;
-import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
-import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
-import org.eientei.jshbot.api.tuiconsole.MountPoint;
 import org.eientei.jshbot.api.dispatcher.Subscriber;
 import org.eientei.jshbot.api.dispatcher.SubscriberContext;
 import org.eientei.jshbot.api.message.Message;
-import org.eientei.jshbot.tui.utils.GenericActivatorThread;
-import org.eientei.jshbot.tui.utils.GenericServiceListener;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
+import org.eientei.jshbot.api.tuiconsole.MountPoint;
+import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
+import org.eientei.jshbot.bundles.utils.GenericServiceListener;
 import org.eientei.jshbot.protocols.console.commands.EchoCommand;
 import org.eientei.jshbot.protocols.console.commands.HelpCommand;
 import org.osgi.framework.BundleContext;

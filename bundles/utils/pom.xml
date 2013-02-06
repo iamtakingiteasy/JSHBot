@@ -42,7 +42,7 @@
                             org.osgi.*,
                             org.eientei.jshbot.api.dispatcher
                         </Import-Package>
-                        <Export-Package>org.eientei.jshbot.tui.utils</Export-Package>
+                        <Export-Package>org.eientei.jshbot.bundles.utils</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

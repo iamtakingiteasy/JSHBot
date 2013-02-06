@@ -1,10 +1,10 @@
 package org.eientei.jshbot.tui.commands.bundle;
 
+import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommandCompleter;
 import org.eientei.jshbot.api.tuiconsole.MountPoint;
-import org.eientei.jshbot.api.dispatcher.Dispatcher;
-import org.eientei.jshbot.tui.utils.GenericSingularServiceListener;
+import org.eientei.jshbot.bundles.utils.GenericSingularServiceListener;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;

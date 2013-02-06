@@ -1,7 +1,7 @@
 package org.eientei.jshbot.tui.commands.bundle;
 
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
-import org.eientei.jshbot.tui.utils.GenericActivatorThread;
+import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
 import org.osgi.framework.BundleContext;
 
 /**

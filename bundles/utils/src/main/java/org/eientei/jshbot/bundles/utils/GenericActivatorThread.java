@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.utils;
+package org.eientei.jshbot.bundles.utils;
 
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.osgi.framework.BundleContext;
