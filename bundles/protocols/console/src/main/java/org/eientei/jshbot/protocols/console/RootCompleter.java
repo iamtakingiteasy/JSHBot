@@ -1,6 +1,8 @@
 package org.eientei.jshbot.protocols.console;
 
 import jline.console.completer.Completer;
+import org.eientei.jshbot.protocols.console.api.ConsoleCommandCompleter;
+import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +14,9 @@ import java.util.List;
  * Time: 12:31
  */
 public class RootCompleter implements Completer {
-    private Tree<String,ConsoleCommandContextImpl> commands;
+    private Tree<String,ConsoleCommandContext> commands;
 
-    public RootCompleter(Tree<String, ConsoleCommandContextImpl> commands) {
+    public RootCompleter(Tree<String, ConsoleCommandContext> commands) {
         this.commands = commands;
     }
 
@@ -30,11 +32,11 @@ public class RootCompleter implements Completer {
         boolean traversing = true;
         String currentCommand = "";
         int retpos = 0;
-        Tree.Node<String, ConsoleCommandContextImpl> n = commands.getRoot();
+        Tree.Node<String, ConsoleCommandContext> n = commands.getRoot();
 
         for (String key : keys) {
             if (traversing) {
-                Tree.Node<String,ConsoleCommandContextImpl> c = n.getChild(key);
+                Tree.Node<String,ConsoleCommandContext> c = n.getChild(key);
                 if (c == null) {
                     traversing = false;
                     currentCommand = key;
@@ -60,7 +62,7 @@ public class RootCompleter implements Completer {
         int completionCursor = completionBuffer.length() - 1;
 
         if (n.getData() != null) {
-            for (Completer completer : n.getData().getCompleters()) {
+            for (ConsoleCommandCompleter completer : n.getData().getMountPoint(n.getPath()).getCompleters()) {
                 completer.complete(completionBuffer, completionCursor, candidates);
             }
         }

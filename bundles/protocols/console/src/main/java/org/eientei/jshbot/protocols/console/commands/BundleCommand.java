@@ -1,9 +1,8 @@
 package org.eientei.jshbot.protocols.console.commands;
 
-import jline.console.completer.Completer;
 import org.eientei.jshbot.protocols.console.api.ConsoleCommand;
+import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,24 +12,14 @@ import java.util.List;
  * Time: 12:04
  */
 public class BundleCommand implements ConsoleCommand {
-    @Override
-    public String[][] getMountPoints() {
-        return new String[0][0];
-    }
+
 
     @Override
-    public String getDesc() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public Collection<Completer> getCompleters() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public void setup(ConsoleCommandContext context) {
     }
 
     @Override
     public void execute(List<String> arguments) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /*

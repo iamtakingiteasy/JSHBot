@@ -1,4 +1,4 @@
-package org.eientei.jshbot.bundles.testconsumer;
+package org.eientei.jshbot.bundles.commands.bundle;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -6,23 +6,23 @@ import org.osgi.framework.BundleContext;
 /**
  * Created with IntelliJ IDEA.
  * User: Tumin Alexander
- * Date: 2013-02-03
- * Time: 18:32
+ * Date: 2013-02-06
+ * Time: 18:46
  */
 public class Activator implements BundleActivator {
-    private TestConsumer testConsumer;
+    BundleCommands bundleCommands;
 
     @Override
     public void start(BundleContext context) throws Exception {
-        testConsumer = new TestConsumer(context);
-        testConsumer.start();
+        bundleCommands = new BundleCommands(context);
+        bundleCommands.start();
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        if (testConsumer != null) {
-            testConsumer.terminate();
+        if (bundleCommands != null) {
+            bundleCommands.terminate();
         }
-        testConsumer = null;
+        bundleCommands = null;
     }
 }

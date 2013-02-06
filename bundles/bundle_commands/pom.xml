@@ -8,10 +8,10 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <groupId>org.eientei.jshbot.bundles</groupId>
-  <artifactId>test-consumer</artifactId>
+  <artifactId>bundle_commands</artifactId>
   <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
-  <name>test-consumer</name>
+  <name>bundle_commands</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,6 +32,11 @@
             <artifactId>utils</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.eientei.jshbot.protocols</groupId>
+            <artifactId>console</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -47,10 +52,13 @@
                             org.osgi.*,
                             org.eientei.jshbot.api.dispatcher,
                             org.eientei.jshbot.api.message,
-                            org.eientei.jshbot.bundles.utils
+                            org.eientei.jshbot.bundles.utils,
+                            org.eientei.jshbot.protocols.console.api
                         </Import-Package>
-                        <Private-Package>org.eientei.jshbot.bundles.testconsumer</Private-Package>
-                        <Bundle-Activator>org.eientei.jshbot.bundles.testconsumer.Activator</Bundle-Activator>
+                        <Private-Package>
+                            org.eientei.jshbot.bundles.commands.bundle
+                        </Private-Package>
+                        <Bundle-Activator>org.eientei.jshbot.bundles.commands.bundle.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

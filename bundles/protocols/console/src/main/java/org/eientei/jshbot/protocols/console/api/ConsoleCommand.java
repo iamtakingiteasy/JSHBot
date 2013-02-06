@@ -1,8 +1,5 @@
 package org.eientei.jshbot.protocols.console.api;
 
-import jline.console.completer.Completer;
-
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,8 +9,6 @@ import java.util.List;
  * Time: 20:18
  */
 public interface ConsoleCommand {
-    String[][] getMountPoints();
-    String getDesc();
-    Collection<Completer> getCompleters();
+    void setup(ConsoleCommandContext context);
     void execute(List<String> arguments);
 }

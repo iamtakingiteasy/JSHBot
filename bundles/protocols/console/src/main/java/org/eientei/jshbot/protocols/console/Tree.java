@@ -84,9 +84,13 @@ public class Tree<K,V> implements Iterable<Tree.Node<K, V>> {
         }
 
         Node<K,V> parent = n.getParent();
-        parent.removeChild(n.getKey());
+        if (n.isLeaf()) {
+            parent.removeChild(n.getKey());
+        } else {
+            n.markForDeletion();
+        }
 
-        if (parent.isEmpty() && parent.isLeaf()) {
+        if ((parent.isEmpty() || parent.isMarkedForDeletion()) && parent.isLeaf()) {
             remove(parent.getPath());
         }
 
@@ -112,6 +116,7 @@ public class Tree<K,V> implements Iterable<Tree.Node<K, V>> {
         private final Node<K,V> parent;
         private final List<K> path;
         private V data = null;
+        private boolean markedForDeletion = false;
 
         public Node(K key, Node<K, V> parent) {
             this.parent = parent;
@@ -122,6 +127,14 @@ public class Tree<K,V> implements Iterable<Tree.Node<K, V>> {
             if (key != null) {
                 path.add(key);
             }
+        }
+
+        public void markForDeletion() {
+            markedForDeletion = true;
+        }
+
+        public boolean isMarkedForDeletion() {
+            return markedForDeletion;
         }
 
         public V getData() {

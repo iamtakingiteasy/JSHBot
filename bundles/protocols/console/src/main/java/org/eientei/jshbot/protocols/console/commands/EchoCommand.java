@@ -1,14 +1,13 @@
 package org.eientei.jshbot.protocols.console.commands;
 
-import jline.console.completer.Completer;
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.message.Message;
 import org.eientei.jshbot.bundles.utils.GenericSingularServiceListener;
 import org.eientei.jshbot.protocols.console.api.ConsoleCommand;
+import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
+import org.eientei.jshbot.protocols.console.api.MountPoint;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,24 +23,13 @@ public class EchoCommand implements ConsoleCommand {
         this.dispatcherService = dispatcherService;
     }
 
-    @Override
-    public String[][] getMountPoints() {
-        return new String[][] {
-                new String[] {"echo"},
-                new String[] {"some", "long", "path", "to", "a", "regular", "echo"},
-                new String[] {"some", "long", "path", "to", "a", "regular", "newecho"}
-
-        };
-    }
 
     @Override
-    public String getDesc() {
-        return "Echoes it's arguments";
-    }
-
-    @Override
-    public Collection<Completer> getCompleters() {
-        return new ArrayList<Completer>();
+    public void setup(ConsoleCommandContext context) {
+        context.addMountPoint(new MountPoint("Echoes it's output",
+                null,
+                false,
+                "echo"));
     }
 
     @Override

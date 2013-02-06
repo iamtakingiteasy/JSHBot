@@ -14,7 +14,7 @@
   <modules>
     <module>bot</module>
     <module>utils</module>
-    <module>test-consumer</module>
     <module>protocols</module>
+    <module>bundle_commands</module>
   </modules>
 </project>

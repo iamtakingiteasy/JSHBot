@@ -7,7 +7,10 @@ import org.eientei.jshbot.api.message.Message;
 import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
 import org.eientei.jshbot.bundles.utils.GenericServiceListener;
 import org.eientei.jshbot.protocols.console.api.ConsoleCommand;
+import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
+import org.eientei.jshbot.protocols.console.api.MountPoint;
 import org.eientei.jshbot.protocols.console.commands.EchoCommand;
+import org.eientei.jshbot.protocols.console.commands.HelpCommand;
 import org.osgi.framework.BundleContext;
 
 import java.io.IOException;
@@ -27,8 +30,8 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
     private String prompt = "JSHBot> ";
     private ConsoleReader consoleReader;
     private Queue<Message> messagequeue = new LinkedBlockingQueue<Message>();
-    private Tree<String,ConsoleCommandContextImpl> commandTree = new Tree<String, ConsoleCommandContextImpl>();
-    private Map<ConsoleCommand,List<List<String>>> commandTreePath = new HashMap<ConsoleCommand, List<List<String>>>();
+    private Tree<String,ConsoleCommandContext> commandTree = new Tree<String, ConsoleCommandContext>();
+    private Map<ConsoleCommand,ConsoleCommandContext> commandTreePath = new HashMap<ConsoleCommand, ConsoleCommandContext>();
 
     public ConsoleProtocol(BundleContext bundleContext) {
         super(bundleContext, false);
@@ -43,6 +46,7 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
 
 
         bundleContext.registerService(ConsoleCommand.class, new EchoCommand(dispatcherService), null);
+        bundleContext.registerService(ConsoleCommand.class, new HelpCommand(dispatcherService, commandTree), null);
         // register commands
         /*
         builtinCommands.add(bundleContext.registerService(ConsoleCommand.class, new BundleCommand(dispatcherService, bundleContext), null));
@@ -112,13 +116,13 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
 
     private void evluate(String line) {
         List<String> keys = ShellUtils.shellSplit(line);
-        Tree.Node<String,ConsoleCommandContextImpl> n = commandTree.getRoot();
+        Tree.Node<String,ConsoleCommandContext> n = commandTree.getRoot();
         boolean traversing = true;
-        List<String> arguments = new ArrayList<String>();
+        final List<String> arguments = new ArrayList<String>();
 
         for (String key : keys) {
             if (traversing) {
-                Tree.Node<String,ConsoleCommandContextImpl> c = n.getChild(key);
+                Tree.Node<String,ConsoleCommandContext> c = n.getChild(key);
                 if (c == null) {
                     traversing = false;
                     arguments.add(key);
@@ -131,7 +135,17 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
         }
 
         if (n.getData() != null) {
-            n.getData().getCommand().execute(arguments);
+            if (n.getData().getMountPoint(n.getPath()).isAutoThreading()) {
+                final Tree.Node<String, ConsoleCommandContext> finalN = n;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        finalN.getData().getCommand().execute(arguments);
+                    }
+                }.start();
+            } else {
+                n.getData().getCommand().execute(arguments);
+            }
         } else {
             String commandLine = ShellUtils.concat(keys);
             Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), "No such command: " + commandLine);
@@ -166,20 +180,19 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
 
         @Override
         protected void removeService(ConsoleCommand service) {
-            List<List<String>> paths = commandTreePath.remove(service);
-            commandTreePath.remove(service);
-            for (List<String> p : paths) {
-                commandTree.remove(p);
+            ConsoleCommandContext context = commandTreePath.remove(service);
+
+            for (MountPoint p : context.getAllMountPoints()) {
+                commandTree.remove(p.getMountPoint());
             }
+
         }
 
         @Override
         protected void addService(ConsoleCommand service) {
-            ConsoleCommandContextImpl context = new ConsoleCommandContextImpl(service);
-            commandTreePath.put(service, context.getCommandMountPoints());
-            for (List<String> p : context.getCommandMountPoints()) {
-                commandTree.insert(context,p);
-            }
+            ConsoleCommandContext context = new ConsoleCommandContextImpl(service,commandTree);
+            commandTreePath.put(service,context);
+            service.setup(context);
         }
     }
 }
