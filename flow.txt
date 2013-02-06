@@ -1,0 +1,31 @@
+Recieving:
+
+  <some user sends a org.eientei.jshbot.api.message over protocol in room of chatnet>
+                               |
+                               v
+             It gets read from socket by [Connector]
+                               |
+                               v
+ The sequence of read bytes interpreted as [Message] by [Protocol]
+                               |
+                               v
+     [Protocol] sends an interpreted [Message] to [Dispatcher]
+                               |
+                               v
+    [Dispatcher] dispatches this org.eientei.jshbot.api.message amoung [Subscriber]s
+
+
+Sending:
+       <some [Subscriber] is ready to reply to [Message]>
+                               |
+                               v
+              [Message] gets send to [Dispatcher]
+                               |
+                               v
+[Dispatcher] puts it in timely queue, limiting number of org.eientei.jshbot.api.message per unit of time
+                               |
+                               v
+ Once org.eientei.jshbot.api.message is ready to be extracted from queue, it sended to [Protcol]
+                               |
+                               v
+ Protocol serializes the org.eientei.jshbot.api.message in sequence of bytes and sends it over [Connector]
