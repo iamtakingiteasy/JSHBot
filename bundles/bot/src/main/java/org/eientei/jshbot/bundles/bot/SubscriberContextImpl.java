@@ -1,5 +1,6 @@
 package org.eientei.jshbot.bundles.bot;
 
+import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.dispatcher.SubscriberContext;
 
 import java.net.URI;
@@ -13,6 +14,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SubscriberContextImpl implements SubscriberContext {
     private CopyOnWriteArrayList<URI> topics = new CopyOnWriteArrayList<URI>();
+    private Dispatcher dispatcher;
+
+    public SubscriberContextImpl(Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+    }
+
 
     @Override
     public void addTopic(URI uri) {

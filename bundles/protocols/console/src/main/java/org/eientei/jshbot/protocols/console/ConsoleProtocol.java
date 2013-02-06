@@ -1,14 +1,14 @@
 package org.eientei.jshbot.protocols.console;
 
 import jline.console.ConsoleReader;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
+import org.eientei.jshbot.api.tuiconsole.MountPoint;
 import org.eientei.jshbot.api.dispatcher.Subscriber;
 import org.eientei.jshbot.api.dispatcher.SubscriberContext;
 import org.eientei.jshbot.api.message.Message;
 import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
 import org.eientei.jshbot.bundles.utils.GenericServiceListener;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommand;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
-import org.eientei.jshbot.protocols.console.api.MountPoint;
 import org.eientei.jshbot.protocols.console.commands.EchoCommand;
 import org.eientei.jshbot.protocols.console.commands.HelpCommand;
 import org.osgi.framework.BundleContext;
@@ -63,12 +63,15 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        inlineMessage("Shell started");
     }
 
     @Override
     protected void deinitialize() {
         consoleCommandsListener.unregisterServiceListener();
         consoleCommandsListener.ungetAllServices();
+        inlineMessage("Shell stopped");
     }
 
     @Override
@@ -95,21 +98,23 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
         }
     }
 
+    private void inlineMessage(String text) {
+        try {
+            consoleReader.resetPromptLine("","",0);
+            consoleReader.println(text);
+            consoleReader.setPrompt(prompt);
+            consoleReader.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private boolean drainMessageQueue() {
         boolean wasMessages = false;
         Message message;
         while ((message = messagequeue.poll()) != null) {
             wasMessages = true;
-            try {
-                consoleReader.resetPromptLine("","",0);
-                consoleReader.println(message.getText());
-                consoleReader.setPrompt(prompt);
-                //consoleReader.resetPromptLine(prompt,"",0);
-                consoleReader.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            inlineMessage(message.getText());
         }
         return wasMessages;
     }

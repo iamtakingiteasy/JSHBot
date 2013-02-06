@@ -1,8 +1,8 @@
 package org.eientei.jshbot.protocols.console;
 
-import org.eientei.jshbot.protocols.console.api.ConsoleCommand;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
-import org.eientei.jshbot.protocols.console.api.MountPoint;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
+import org.eientei.jshbot.api.tuiconsole.MountPoint;
 
 import java.util.Collection;
 import java.util.List;

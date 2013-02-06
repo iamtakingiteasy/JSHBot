@@ -1,7 +1,7 @@
 package org.eientei.jshbot.bundles.commands.bundle;
 
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
 import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommand;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -19,6 +19,10 @@ public class BundleCommands extends GenericActivatorThread {
     protected void initialize() {
         bundleContext.registerService(ConsoleCommand.class, new BundleList(bundleContext, dispatcherService), null);
         bundleContext.registerService(ConsoleCommand.class, new BundleStop(bundleContext, dispatcherService), null);
+        bundleContext.registerService(ConsoleCommand.class, new BundleStart(bundleContext, dispatcherService), null);
+        bundleContext.registerService(ConsoleCommand.class, new BundleRestart(bundleContext, dispatcherService), null);
+        bundleContext.registerService(ConsoleCommand.class, new BundleUpdate(bundleContext, dispatcherService), null);
+        bundleContext.registerService(ConsoleCommand.class, new BundleUninstall(bundleContext, dispatcherService), null);
     }
 
     @Override

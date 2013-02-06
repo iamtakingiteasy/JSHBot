@@ -1,6 +1,6 @@
 package org.eientei.jshbot.bundles.commands.bundle;
 
-import org.eientei.jshbot.protocols.console.api.ConsoleCommandCompleter;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandCompleter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 

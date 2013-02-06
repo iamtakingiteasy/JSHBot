@@ -1,13 +1,13 @@
 package org.eientei.jshbot.protocols.console.commands;
 
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
+import org.eientei.jshbot.api.tuiconsole.MountPoint;
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.message.Message;
 import org.eientei.jshbot.bundles.utils.GenericSingularServiceListener;
 import org.eientei.jshbot.protocols.console.ShellUtils;
 import org.eientei.jshbot.protocols.console.Tree;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommand;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
-import org.eientei.jshbot.protocols.console.api.MountPoint;
 
 import java.net.URI;
 import java.util.ArrayList;

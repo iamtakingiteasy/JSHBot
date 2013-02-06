@@ -1,12 +1,12 @@
 package org.eientei.jshbot.bundles.commands.bundle;
 
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandCompleter;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
+import org.eientei.jshbot.api.tuiconsole.MountPoint;
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.message.Message;
 import org.eientei.jshbot.bundles.utils.GenericSingularServiceListener;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommand;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommandCompleter;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
-import org.eientei.jshbot.protocols.console.api.MountPoint;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -14,44 +14,33 @@ import org.osgi.framework.BundleException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Tumin Alexander
- * Date: 2013-02-06
- * Time: 21:38
+ * Date: 2013-02-07
+ * Time: 00:22
  */
-public class BundleStop implements ConsoleCommand {
-    private BundleContext bundleContext;
+public abstract class BundleCommandTemplate implements ConsoleCommand {
+    protected BundleContext bundleContext;
     private GenericSingularServiceListener<Dispatcher> dispatcherService;
 
-    public BundleStop(BundleContext bundleContext, GenericSingularServiceListener<Dispatcher> dispatcherService) {
+    public BundleCommandTemplate(BundleContext bundleContext, GenericSingularServiceListener<Dispatcher> dispatcherService) {
         this.bundleContext = bundleContext;
         this.dispatcherService = dispatcherService;
     }
+
+    protected abstract BundleIdCompleter.IdProvider getIdProvider();
+    protected abstract MountPoint getMountPoint(List<ConsoleCommandCompleter> completers);
+    protected abstract String getAction();
+    protected abstract void command(long bundleId) throws BundleException;
 
 
     @Override
     public void setup(ConsoleCommandContext context) {
         List<ConsoleCommandCompleter> completers = new ArrayList<ConsoleCommandCompleter>();
-        completers.add(new BundleIdCompleter(bundleContext, new BundleIdCompleter.IdProvider() {
-            @Override
-            public SortedSet<String> provide() {
-                SortedSet<String> result = new TreeSet<String>();
-                for (Bundle b : bundleContext.getBundles()) {
-                    if (b.getState() == Bundle.ACTIVE) {
-                        result.add(String.valueOf(b.getBundleId()));
-                    }
-                }
-                return result;
-            }
-        }));
-        context.addMountPoint(new MountPoint("Stops bundle",
-                completers,
-                true,
-                "bundle", "stop"));
+        completers.add(new BundleIdCompleter(bundleContext, getIdProvider()));
+        context.addMountPoint(getMountPoint(completers));
     }
 
     @Override
@@ -78,8 +67,8 @@ public class BundleStop implements ConsoleCommand {
                 return;
             }
             try {
-                bundleContext.getBundle(bundleId).stop();
-                Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), "Bundle " + bundleId + " stopped.");
+                command(bundleId);
+                Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), "Bundle " + bundleId + " " + getAction());
                 dispatcherService.getOrWaitForServiceInstance().dispatch(message);
             } catch (BundleException e) {
                 e.printStackTrace();

@@ -23,6 +23,12 @@ public class Message {
         this.text = text;
     }
 
+    public Message(String source, String dest, String text) {
+        this.source = URI.create(source);
+        this.dest = URI.create(dest);
+        this.text = text;
+    }
+
     public void addTextEffect(TextEffect effect) {
         textEffects.add(effect);
     }

@@ -1,8 +1,8 @@
 package org.eientei.jshbot.protocols.console;
 
 import jline.console.completer.Completer;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommandCompleter;
-import org.eientei.jshbot.protocols.console.api.ConsoleCommandContext;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandCompleter;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
 
 import java.util.ArrayList;
 import java.util.List;

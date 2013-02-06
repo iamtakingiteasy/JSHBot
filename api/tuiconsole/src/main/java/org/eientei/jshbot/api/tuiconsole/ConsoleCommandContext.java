@@ -1,4 +1,4 @@
-package org.eientei.jshbot.protocols.console.api;
+package org.eientei.jshbot.api.tuiconsole;
 
 import java.util.Collection;
 import java.util.List;

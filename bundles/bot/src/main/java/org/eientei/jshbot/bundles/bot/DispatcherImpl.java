@@ -26,6 +26,7 @@ public class DispatcherImpl extends GenericActivatorThread implements Dispatcher
     private Queue<Message> messageQueue = new ArrayBlockingQueue<Message>(32);
     private ConcurrentMap<Subscriber, SubscriberContextImpl> subscribers = new ConcurrentHashMap<Subscriber, SubscriberContextImpl>();
     private SubscriberServiceListener subscriberListener;
+    private final Dispatcher dispatcher = this;
 
 
     public DispatcherImpl(BundleContext context) {
@@ -111,7 +112,7 @@ public class DispatcherImpl extends GenericActivatorThread implements Dispatcher
 
         @Override
         protected void addService(Subscriber service) {
-            SubscriberContextImpl context = new SubscriberContextImpl();
+            SubscriberContextImpl context = new SubscriberContextImpl(dispatcher);
             subscribers.put(service, context);
             service.registration(context);
         }

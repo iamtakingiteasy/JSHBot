@@ -13,5 +13,6 @@
   <name>api</name>
   <modules>
     <module>dispatcher</module>
+    <module>tuiconsole</module>
   </modules>
 </project>
