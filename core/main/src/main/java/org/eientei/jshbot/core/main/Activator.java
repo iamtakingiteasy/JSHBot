@@ -70,7 +70,7 @@ public class Activator implements BundleActivator {
 
     private void populateBundleUrls(List<String> bundleUrls, File dir) {
         String relativeDirPath = dir.getAbsolutePath().replaceFirst(bundleRoot.getAbsolutePath(), "...");
-        System.out.println("Scanning bundles directory: " + relativeDirPath);
+        System.out.println("Scanning tui directory: " + relativeDirPath);
 
 
         File[] files = dir.listFiles(new FileFilter() {

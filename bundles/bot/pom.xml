@@ -47,10 +47,10 @@
                             org.osgi.*,
                             org.eientei.jshbot.api.dispatcher,
                             org.eientei.jshbot.api.message,
-                            org.eientei.jshbot.bundles.utils
+                            org.eientei.jshbot.tui.utils
                         </Import-Package>
-                        <Private-Package>org.eientei.jshbot.bundles.bot</Private-Package>
-                        <Bundle-Activator>org.eientei.jshbot.bundles.bot.Activator</Bundle-Activator>
+                        <Private-Package>org.eientei.jshbot.tui.bot</Private-Package>
+                        <Bundle-Activator>org.eientei.jshbot.tui.bot.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

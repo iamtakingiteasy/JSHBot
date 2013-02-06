@@ -22,9 +22,9 @@
         <configuration>
           <instructions>
             <Import-Package>org.osgi.*,
-                            org.eientei.jshbot.api.dispatcher,
-                            org.eientei.jshbot.api.message,
-                            org.eientei.jshbot.bundles.utils</Import-Package>
+                org.eientei.jshbot.api.dispatcher,
+                org.eientei.jshbot.api.message,
+                org.eientei.jshbot.tui.utils</Import-Package>
             <Private-Package>org.eientei.jshbot.protocols.console</Private-Package>
             <Bundle-Activator>org.eientei.jshbot.protocols.console.Activator</Bundle-Activator>
           </instructions>
@@ -65,7 +65,7 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.eientei.jshbot.bundles</groupId>
+      <groupId>org.eientei.jshbot.tui</groupId>
       <artifactId>utils</artifactId>
       <version>1.0-SNAPSHOT</version>
       <scope>compile</scope>

@@ -57,7 +57,7 @@
                             org.osgi.*,
                             org.eientei.jshbot.api.dispatcher,
                             org.eientei.jshbot.api.message,
-                            org.eientei.jshbot.bundles.utils,
+                            org.eientei.jshbot.tui.utils,
                             org.eientei.jshbot.api.tuiconsole
                         </Import-Package>
                         <Private-Package>

@@ -239,10 +239,10 @@ public class BundleCommand implements ConsoleCommand {
 
     private void listBundles() {
         StringBuilder sb = new StringBuilder();
-        Bundle[] bundles = bundleContext.getBundles();
+        Bundle[] tui = bundleContext.getBundles();
         boolean first = true;
-        if (bundles != null) {
-            for (Bundle b : bundles) {
+        if (tui != null) {
+            for (Bundle b : tui) {
                 if (!first) {
                     sb.append("\n");
                 } else {

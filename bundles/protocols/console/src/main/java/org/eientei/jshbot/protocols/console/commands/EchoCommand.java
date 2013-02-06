@@ -5,7 +5,7 @@ import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
 import org.eientei.jshbot.api.tuiconsole.MountPoint;
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.message.Message;
-import org.eientei.jshbot.bundles.utils.GenericSingularServiceListener;
+import org.eientei.jshbot.tui.utils.GenericSingularServiceListener;
 
 import java.net.URI;
 import java.util.List;
