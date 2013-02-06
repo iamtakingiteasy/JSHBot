@@ -8,10 +8,10 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <groupId>org.eientei.jshbot.bundles</groupId>
-  <artifactId>bot</artifactId>
+  <artifactId>router</artifactId>
   <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
-  <name>bot</name>
+  <name>router</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -49,8 +49,8 @@
                             org.eientei.jshbot.api.message,
                             org.eientei.jshbot.tui.utils
                         </Import-Package>
-                        <Private-Package>org.eientei.jshbot.tui.bot</Private-Package>
-                        <Bundle-Activator>org.eientei.jshbot.tui.bot.Activator</Bundle-Activator>
+                        <Private-Package>org.eientei.jshbot.tui.router</Private-Package>
+                        <Bundle-Activator>org.eientei.jshbot.tui.router.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

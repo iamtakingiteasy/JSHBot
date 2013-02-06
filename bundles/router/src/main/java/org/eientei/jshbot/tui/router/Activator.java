@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.bot;
+package org.eientei.jshbot.tui.router;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

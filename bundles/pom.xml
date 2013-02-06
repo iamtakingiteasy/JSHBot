@@ -12,7 +12,7 @@
   <packaging>pom</packaging>
   <name>bundles</name>
   <modules>
-    <module>bot</module>
+    <module>router</module>
     <module>utils</module>
     <module>protocols</module>
     <module>tuicommands</module>

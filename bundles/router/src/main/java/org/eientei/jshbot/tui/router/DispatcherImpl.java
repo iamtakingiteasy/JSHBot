@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.bot;
+package org.eientei.jshbot.tui.router;
 
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.dispatcher.Subscriber;
