@@ -59,14 +59,16 @@ public class RootCompleter implements Completer {
         }
 
         String completionBuffer = (currentCommand + " " + ShellUtils.concat(arguments)).trim();
-        int completionCursor = completionBuffer.length() - 1;
+        int completionCursor = completionBuffer.length();
+        int ret = -1;
 
         if (n.getData() != null) {
             for (ConsoleCommandCompleter completer : n.getData().getMountPoint(n.getPath()).getCompleters()) {
-                completer.complete(completionBuffer, completionCursor, candidates);
+                ret = completer.complete(completionBuffer, completionCursor, candidates);
             }
         }
 
+        if (ret > -1) retpos += ret;
         return candidates.isEmpty() ? -1 : retpos;
     }
 }

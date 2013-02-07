@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.commands.bundle;
+package org.eientei.jshbot.tuicommands.bundle;
 
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.message.Message;
@@ -11,9 +11,10 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
-import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,13 +25,14 @@ import java.util.List;
 public abstract class BundleCommandTemplate implements ConsoleCommand {
     protected BundleContext bundleContext;
     private GenericSingularServiceListener<Dispatcher> dispatcherService;
+    private Map<String, Long> bundleNameIdMap = new HashMap<String, Long>();
 
     public BundleCommandTemplate(BundleContext bundleContext, GenericSingularServiceListener<Dispatcher> dispatcherService) {
         this.bundleContext = bundleContext;
         this.dispatcherService = dispatcherService;
     }
 
-    protected abstract BundleIdCompleter.IdProvider getIdProvider();
+    protected abstract BundleIdCompleter.BundleMatcher getBundleMatcher();
     protected abstract MountPoint getMountPoint(List<ConsoleCommandCompleter> completers);
     protected abstract String getAction();
     protected abstract void command(long bundleId) throws BundleException;
@@ -39,20 +41,34 @@ public abstract class BundleCommandTemplate implements ConsoleCommand {
     @Override
     public void setup(ConsoleCommandContext context) {
         List<ConsoleCommandCompleter> completers = new ArrayList<ConsoleCommandCompleter>();
-        completers.add(new BundleIdCompleter(bundleContext, getIdProvider()));
+
+        completers.add(new BundleIdCompleter(bundleContext, getBundleMatcher()));
         context.addMountPoint(getMountPoint(completers));
     }
 
     @Override
     public void execute(List<String> arguments) {
-        int bundleId = -1;
+        long bundleId = -1;
         if (arguments.size() > 0) {
             try {
                 bundleId = Integer.parseInt(arguments.get(0));
             } catch (NumberFormatException e) {
-                Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), "Wrong bundle id: " + arguments.get(0));
-                dispatcherService.getOrWaitForServiceInstance().dispatch(message);
-                return;
+                for (Bundle b : bundleContext.getBundles()) {
+                    if (b.getSymbolicName().equals(arguments.get(0))) {
+                        bundleId = b.getBundleId();
+                        break;
+                    }
+                }
+                if (bundleId == -1) {
+                    Message message;
+                    if (arguments.get(0).matches("^[0-9]+.*$")) {
+                        message = new Message("console://stdin", "console://stdout", "Invalid bundle id: " + arguments.get(0));
+                    } else {
+                        message = new Message("console://stdin", "console://stdout", "Invalid bundle symbolic name: " + arguments.get(0));
+                    }
+                    dispatcherService.getOrWaitForServiceInstance().dispatch(message);
+                    return;
+                }
             }
             Bundle bundle = null;
             for (Bundle b : bundleContext.getBundles()) {
@@ -62,17 +78,20 @@ public abstract class BundleCommandTemplate implements ConsoleCommand {
                 }
             }
             if ((bundle == null)) {
-                Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), "No such bundle with id " + bundleId);
+                Message message = new Message("console://stdin", "console://stdout", "No such bundle with id " + bundleId);
                 dispatcherService.getOrWaitForServiceInstance().dispatch(message);
                 return;
             }
             try {
                 command(bundleId);
-                Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), "Bundle " + bundleId + " " + getAction());
+                Message message = new Message("console://stdin", "console://stdout", "Bundle " + bundleId + " " + getAction());
                 dispatcherService.getOrWaitForServiceInstance().dispatch(message);
             } catch (BundleException e) {
                 e.printStackTrace();
             }
+        } else {
+            Message message = new Message("console://stdin", "console://stdout", "Please enter bundle id or symbolic name");
+            dispatcherService.getOrWaitForServiceInstance().dispatch(message);
         }
     }
 }

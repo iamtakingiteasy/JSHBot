@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.eientei.jshbot.bundles</groupId>
-    <artifactId>bundles</artifactId>
+    <groupId>org.eientei.jshbot.tuicommands</groupId>
+    <artifactId>tuicommands</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.eientei.jshbot.bundles</groupId>
+  <groupId>org.eientei.jshbot.tuicommands</groupId>
   <artifactId>bundle</artifactId>
   <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
@@ -37,6 +37,11 @@
             <artifactId>tuiconsole</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.eientei.jshbot.protocols</groupId>
+            <artifactId>console</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -53,12 +58,13 @@
                             org.eientei.jshbot.api.dispatcher,
                             org.eientei.jshbot.api.message,
                             org.eientei.jshbot.bundles.utils,
-                            org.eientei.jshbot.api.tuiconsole
+                            org.eientei.jshbot.api.tuiconsole,
+                            jline.console.completer
                         </Import-Package>
                         <Private-Package>
-                            org.eientei.jshbot.tui.commands.bundle
+                            org.eientei.jshbot.tuicommands.bundle
                         </Private-Package>
-                        <Bundle-Activator>org.eientei.jshbot.tui.commands.bundle.Activator</Bundle-Activator>
+                        <Bundle-Activator>org.eientei.jshbot.tuicommands.bundle.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

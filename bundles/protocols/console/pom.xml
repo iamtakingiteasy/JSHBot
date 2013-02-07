@@ -58,8 +58,12 @@
                             org.eientei.jshbot.api.dispatcher,
                             org.eientei.jshbot.api.message,
                             org.eientei.jshbot.bundles.utils,
-                            org.eientei.jshbot.api.tuiconsole
+                            org.eientei.jshbot.api.tuiconsole,
+                            jline.console.completer
                         </Import-Package>
+                        <Export-Package>
+                            jline.console.completer
+                        </Export-Package>
                         <Private-Package>
                             org.eientei.jshbot.protocols.console,
                             org.eientei.jshbot.protocols.console.commands,

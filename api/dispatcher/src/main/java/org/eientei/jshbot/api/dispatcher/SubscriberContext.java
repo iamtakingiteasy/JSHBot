@@ -1,6 +1,7 @@
 package org.eientei.jshbot.api.dispatcher;
 
 import java.net.URI;
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,6 +10,9 @@ import java.net.URI;
  * Time: 10:45
  */
 public interface SubscriberContext {
-    void addTopic(URI uri);
-    void removeTopic(URI uri);
+    void addTopic(String uri);
+    void removeTopic(String uri);
+    Collection<URI> getTopics();
+    public void setQueueSize(int size);
+    public int getQueueSize();
 }

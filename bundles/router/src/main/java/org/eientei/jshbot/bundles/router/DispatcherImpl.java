@@ -3,17 +3,21 @@ package org.eientei.jshbot.bundles.router;
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.dispatcher.Subscriber;
 import org.eientei.jshbot.api.message.Message;
+import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
+import org.eientei.jshbot.bundles.router.tuicommands.SendMessage;
+import org.eientei.jshbot.bundles.router.tuicommands.SubscriberList;
 import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
 import org.eientei.jshbot.bundles.utils.GenericServiceListener;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,11 +26,10 @@ import java.util.concurrent.ConcurrentMap;
  * Time: 06:41
  */
 public class DispatcherImpl extends GenericActivatorThread implements Dispatcher {
-    private ServiceRegistration<Dispatcher> service;
     private Queue<Message> messageQueue = new ArrayBlockingQueue<Message>(32);
-    private ConcurrentMap<Subscriber, SubscriberContextImpl> subscribers = new ConcurrentHashMap<Subscriber, SubscriberContextImpl>();
+    private ConcurrentMap<String, SubscriberContextImpl> subscribers = new ConcurrentHashMap<String, SubscriberContextImpl>();
     private SubscriberServiceListener subscriberListener;
-    private final Dispatcher dispatcher = this;
+    private Set<UUID> usedUUID = new ConcurrentSkipListSet<UUID>();
 
 
     public DispatcherImpl(BundleContext context) {
@@ -55,12 +58,13 @@ public class DispatcherImpl extends GenericActivatorThread implements Dispatcher
     @Override
     protected void initialize() {
         subscriberListener = new SubscriberServiceListener(bundleContext);
-        service = bundleContext.registerService(Dispatcher.class,this,null);
+        bundleContext.registerService(Dispatcher.class,this,null);
+        bundleContext.registerService(ConsoleCommand.class, new SubscriberList(subscribers,this), null);
+        bundleContext.registerService(ConsoleCommand.class, new SendMessage(this), null);
     }
 
     @Override
     protected void deinitialize() {
-        //service.unregister();
         subscriberListener.ungetAllServices();
         subscriberListener.unregisterServiceListener();
     }
@@ -69,19 +73,23 @@ public class DispatcherImpl extends GenericActivatorThread implements Dispatcher
     protected void doIterativeJob() {
         Message message;
         while ((message = messageQueue.poll()) != null) {
-            for (Map.Entry<Subscriber, SubscriberContextImpl> entry: subscribers.entrySet()) {
+            for (SubscriberContextImpl context : subscribers.values()) {
                 boolean sendMessage = false;
-                for (URI topic : entry.getValue().getTopics()) {
-                    if  (              (message.getDest() == null && uriMatch(message.getSource(), topic))
-                                    || (message.getDest() != null && uriMatch(topic, message.getDest()))
+                for (URI topic : context.getTopics()) {
+                    if  (      (message.getDest() == null && uriMatch(message.getSource(), topic))
+                            || (message.getDest() != null && uriMatch(topic, message.getDest()))
                             ) {
                         sendMessage = true;
                         break;
                     }
                 }
                 if (sendMessage) {
-                    entry.getKey().consume(message);
+                    context.addMessage(message);
                 }
+            }
+
+            if (!message.wasDelivered()) {
+                // do anouncing message which wasn't delivered
             }
         }
     }
@@ -106,14 +114,27 @@ public class DispatcherImpl extends GenericActivatorThread implements Dispatcher
         }
 
         @Override
-        protected void removeService(Subscriber service) {
-            subscribers.remove(service);
+        protected void removeService(Subscriber service, String serviceSymbolicName) {
+            subscribers.get(serviceSymbolicName).shutdown();
         }
 
         @Override
-        protected void addService(Subscriber service) {
-            SubscriberContextImpl context = new SubscriberContextImpl(dispatcher);
-            subscribers.put(service, context);
+        protected void addService(Subscriber service, String serviceSymbolicName) {
+            SubscriberContextImpl  context = subscribers.get(serviceSymbolicName);
+
+            if (context == null) {
+                UUID uuid = UUID.nameUUIDFromBytes(serviceSymbolicName.getBytes());
+
+                while (usedUUID.contains(uuid)) {
+                    uuid = UUID.randomUUID();
+                }
+
+                context = new SubscriberContextImpl(service,uuid);
+                subscribers.put(serviceSymbolicName, context);
+            } else {
+                context.renew(service);
+            }
+            context.addTopic("mailbox://" + context.getUuid().toString());
             service.registration(context);
         }
     }

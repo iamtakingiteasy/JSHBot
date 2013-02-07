@@ -6,7 +6,7 @@
     <groupId>org.eientei.jshbot.bundles</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.eientei.jshbot.tui.commands</groupId>
+  <groupId>org.eientei.jshbot.tuicommands</groupId>
   <artifactId>tuicommands</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>

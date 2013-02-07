@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.commands.bundle;
+package org.eientei.jshbot.tuicommands.bundle;
 
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
 import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
@@ -23,6 +23,7 @@ public class BundleCommands extends GenericActivatorThread {
         bundleContext.registerService(ConsoleCommand.class, new BundleRestart(bundleContext, dispatcherService), null);
         bundleContext.registerService(ConsoleCommand.class, new BundleUpdate(bundleContext, dispatcherService), null);
         bundleContext.registerService(ConsoleCommand.class, new BundleUninstall(bundleContext, dispatcherService), null);
+        bundleContext.registerService(ConsoleCommand.class, new BundleInstall(bundleContext, dispatcherService), null);
     }
 
     @Override

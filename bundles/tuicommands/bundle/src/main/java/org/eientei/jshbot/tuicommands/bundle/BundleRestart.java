@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.commands.bundle;
+package org.eientei.jshbot.tuicommands.bundle;
 
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
@@ -10,8 +10,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,15 +23,11 @@ public class BundleRestart extends BundleCommandTemplate implements ConsoleComma
     }
 
     @Override
-    protected BundleIdCompleter.IdProvider getIdProvider() {
-        return new BundleIdCompleter.IdProvider() {
+    protected BundleIdCompleter.BundleMatcher getBundleMatcher() {
+        return new BundleIdCompleter.BundleMatcher() {
             @Override
-            public SortedSet<String> provide() {
-                SortedSet<String> result = new TreeSet<String>();
-                for (Bundle b : bundleContext.getBundles()) {
-                    result.add(String.valueOf(b.getBundleId()));
-                }
-                return result;
+            public boolean bundleMatches(Bundle bundle) {
+                return true;
             }
         };
     }

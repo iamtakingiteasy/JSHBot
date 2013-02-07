@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.commands.bundle;
+package org.eientei.jshbot.tuicommands.bundle;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;

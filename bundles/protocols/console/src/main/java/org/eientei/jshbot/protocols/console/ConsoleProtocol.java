@@ -14,7 +14,6 @@ import org.eientei.jshbot.protocols.console.commands.HelpCommand;
 import org.osgi.framework.BundleContext;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -105,7 +104,6 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
             consoleReader.setPrompt(prompt);
             consoleReader.flush();
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -153,7 +151,7 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
             }
         } else {
             String commandLine = ShellUtils.concat(keys);
-            Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), "No such command: " + commandLine);
+            Message message = new Message("console://stdin", "console://stdout", "No such command: " + commandLine);
 
             dispatcherService.getOrWaitForServiceInstance().dispatch(message);
         }
@@ -167,8 +165,8 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
 
     @Override
     public void registration(SubscriberContext subscriberContext) {
-        subscriberContext.addTopic(URI.create("console://stdout"));
-        subscriberContext.addTopic(URI.create("console://stderr"));
+        subscriberContext.addTopic("console://stdout");
+        subscriberContext.addTopic("console://stderr");
     }
 
     @Override
@@ -184,7 +182,7 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
         }
 
         @Override
-        protected void removeService(ConsoleCommand service) {
+        protected void removeService(ConsoleCommand service, String serviceSymbolicName) {
             ConsoleCommandContext context = commandTreePath.remove(service);
 
             for (MountPoint p : context.getAllMountPoints()) {
@@ -194,7 +192,7 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
         }
 
         @Override
-        protected void addService(ConsoleCommand service) {
+        protected void addService(ConsoleCommand service, String serviceSymbolicName) {
             ConsoleCommandContext context = new ConsoleCommandContextImpl(service,commandTree);
             commandTreePath.put(service,context);
             service.setup(context);

@@ -28,6 +28,11 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>org.eientei.jshbot.api</groupId>
+            <artifactId>tuiconsole</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.eientei.jshbot.bundles</groupId>
             <artifactId>utils</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -47,6 +52,7 @@
                             org.osgi.*,
                             org.eientei.jshbot.api.dispatcher,
                             org.eientei.jshbot.api.message,
+                            org.eientei.jshbot.api.tuiconsole,
                             org.eientei.jshbot.bundles.utils
                         </Import-Package>
                         <Private-Package>org.eientei.jshbot.bundles.router</Private-Package>

@@ -1,4 +1,4 @@
-package org.eientei.jshbot.tui.commands.bundle;
+package org.eientei.jshbot.tuicommands.bundle;
 
 import org.eientei.jshbot.api.dispatcher.Dispatcher;
 import org.eientei.jshbot.api.message.Message;
@@ -9,7 +9,6 @@ import org.eientei.jshbot.bundles.utils.GenericSingularServiceListener;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
-import java.net.URI;
 import java.util.List;
 
 /**
@@ -80,7 +79,7 @@ public class BundleList implements ConsoleCommand {
                 sb.append(b.getSymbolicName());
             }
         }
-        Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), sb.toString());
+        Message message = new Message("console://stdin", "console://stdout", sb.toString());
         dispatcherService.getOrWaitForServiceInstance().dispatch(message);
     }
 }

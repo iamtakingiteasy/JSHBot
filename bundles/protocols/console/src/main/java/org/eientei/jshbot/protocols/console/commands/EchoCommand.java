@@ -7,7 +7,6 @@ import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
 import org.eientei.jshbot.api.tuiconsole.MountPoint;
 import org.eientei.jshbot.bundles.utils.GenericSingularServiceListener;
 
-import java.net.URI;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class EchoCommand implements ConsoleCommand {
             output.append(arg);
         }
 
-        Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), output.toString());
+        Message message = new Message("console://stdin", "console://stdout", output.toString());
 
         dispatcherService.getOrWaitForServiceInstance().dispatch(message);
     }

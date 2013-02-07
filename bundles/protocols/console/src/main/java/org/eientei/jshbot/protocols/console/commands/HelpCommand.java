@@ -9,7 +9,6 @@ import org.eientei.jshbot.bundles.utils.GenericSingularServiceListener;
 import org.eientei.jshbot.protocols.console.ShellUtils;
 import org.eientei.jshbot.protocols.console.Tree;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +69,7 @@ public class HelpCommand implements ConsoleCommand {
             sb.append("\n");
         }
 
-        Message message = new Message(URI.create("console://stdin"), URI.create("console://stdout"), sb.toString());
+        Message message = new Message("console://stdin", "console://stdout", sb.toString());
 
         dispatcherService.getOrWaitForServiceInstance().dispatch(message);
     }

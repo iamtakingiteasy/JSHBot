@@ -1,9 +1,14 @@
 package org.eientei.jshbot.bundles.router;
 
-import org.eientei.jshbot.api.dispatcher.Dispatcher;
+import org.eientei.jshbot.api.dispatcher.Subscriber;
 import org.eientei.jshbot.api.dispatcher.SubscriberContext;
+import org.eientei.jshbot.api.message.Message;
 
 import java.net.URI;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -13,25 +18,88 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Time: 11:19
  */
 public class SubscriberContextImpl implements SubscriberContext {
+    private int queueSize = 32;
+    private ArrayBlockingQueue<Message> messageQueue = new ArrayBlockingQueue<Message>(queueSize,true);
     private CopyOnWriteArrayList<URI> topics = new CopyOnWriteArrayList<URI>();
-    private Dispatcher dispatcher;
+    private Subscriber subscriber;
+    private UUID uuid;
+    private final Object monitor = new Object();
 
-    public SubscriberContextImpl(Dispatcher dispatcher) {
-        this.dispatcher = dispatcher;
+    public SubscriberContextImpl(Subscriber subscriber, UUID uuid) {
+        this.subscriber = subscriber;
+        this.uuid = uuid;
+        runConsumer();
     }
 
+    private void runConsumer() {
+        new Thread() {
+            @Override
+            public void run() {
+                Message message;
+                while (true) {
+                    synchronized (monitor) {
+                        try {
+                            monitor.wait();
+                        } catch (InterruptedException e) {
+                        }
+                        while ((message = messageQueue.poll()) != null && subscriber != null) {
+                            subscriber.consume(message);
+                        }
+                    }
+                }
+            }
+        }.start();
+    }
+
+    public void addMessage(Message message) {
+        if (messageQueue.remainingCapacity() == 0) {
+            messageQueue.poll();
+        }
+        messageQueue.offer(message);
+        synchronized (monitor) {
+            monitor.notify();
+        }
+    }
 
     @Override
-    public void addTopic(URI uri) {
-        topics.add(uri);
+    public void addTopic(String uri) {
+        topics.add(URI.create(uri));
     }
 
     @Override
-    public void removeTopic(URI uri) {
-        topics.remove(uri);
+    public void removeTopic(String uri) {
+        topics.remove(URI.create(uri));
     }
 
-    public CopyOnWriteArrayList<URI> getTopics() {
-        return topics;
+    public Collection<URI> getTopics() {
+        return Collections.unmodifiableCollection(topics);
+    }
+
+    @Override
+    public void setQueueSize(int size) {
+        queueSize = size;
+        messageQueue = new ArrayBlockingQueue<Message>(queueSize, true, messageQueue);
+    }
+
+    @Override
+    public int getQueueSize() {
+        return queueSize;
+    }
+
+    public Subscriber getSubscriber() {
+        return subscriber;
+    }
+
+    public void shutdown() {
+        topics.clear();
+        subscriber = null;
+    }
+
+    public void renew(Subscriber subscriber) {
+        this.subscriber = subscriber;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 }
