@@ -34,12 +34,19 @@
                 <configuration>
                     <instructions>
                         <Import-Package>
-                            jline.*
+                            jline,
+                            jline.console.completer,
+                            jline.console,
+                            jline.console.history
                         </Import-Package>
                         <Export-Package>
-                            jline.*
+                            jline,
+                            jline.console.completer,
+                            jline.console,
+                            jline.console.history
                         </Export-Package>
                         <Private-Package>
+                            jline.internal,
                             org.fusesource.*
                         </Private-Package>
                     </instructions>

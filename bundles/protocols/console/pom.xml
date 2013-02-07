@@ -59,7 +59,10 @@
                             org.eientei.jshbot.api.message,
                             org.eientei.jshbot.bundles.utils,
                             org.eientei.jshbot.api.tuiconsole,
-                            jline.*
+                            jline,
+                            jline.console.completer,
+                            jline.console,
+                            jline.console.history
                         </Import-Package>
                         <Private-Package>
                             org.eientei.jshbot.protocols.console,

@@ -32,6 +32,7 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
     private Queue<Message> messagequeue = new LinkedBlockingQueue<Message>();
     private Tree<String,ConsoleCommandContext> commandTree = new Tree<String, ConsoleCommandContext>();
     private Map<ConsoleCommand,ConsoleCommandContext> commandTreePath = new HashMap<ConsoleCommand, ConsoleCommandContext>();
+    private SubscriberContext subscriberContext;
 
     public ConsoleProtocol(BundleContext bundleContext) {
         super(bundleContext, false);
@@ -91,6 +92,10 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
 
     @Override
     protected void deinitialize() {
+        subscriberContext.shutdown();
+
+        while (drainMessageQueue());
+
         consoleCommandsListener.unregisterServiceListener();
         consoleCommandsListener.ungetAllServices();
         File historyFile = bundleContext.getDataFile("history");
@@ -207,6 +212,7 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
 
     @Override
     public void registration(SubscriberContext subscriberContext) {
+        this.subscriberContext = subscriberContext;
         subscriberContext.addTopic("console://stdout");
         subscriberContext.addTopic("console://stderr");
     }

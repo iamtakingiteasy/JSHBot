@@ -67,9 +67,11 @@ public abstract class GenericServiceListener<T> implements ServiceListener {
     private void getService(ServiceReference<?> serviceReference) {
         if (!map.containsKey(serviceReference)) {
             T service = (T) bundleContext.getService(serviceReference);
-            map.put(serviceReference,service);
-            String serviceSymbolicName = serviceReference.getBundle().getSymbolicName() + "|" + service.getClass().getName();
-            addService(service, serviceSymbolicName);
+            if (service != null) {
+                map.put(serviceReference,service);
+                String serviceSymbolicName = serviceReference.getBundle().getSymbolicName() + "|" + service.getClass().getName();
+                addService(service, serviceSymbolicName);
+            }
         }
     }
 

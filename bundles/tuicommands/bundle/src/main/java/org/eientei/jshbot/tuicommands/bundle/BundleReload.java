@@ -49,12 +49,12 @@ public class BundleReload implements ConsoleCommand {
             if (b.getBundleId() == bundleContext.getBundle().getBundleId() || b.getBundleId() == 0) {
                 continue;
             }
-            if (reloadAnyway || b.getLastModified() < new File(b.getLocation()).lastModified()) {
+            if (reloadAnyway || b.getLastModified() < new File(b.getLocation().replaceFirst("^file:","")).lastModified()) {
                 bundles.add(b);
             }
         }
         Bundle thisBundle = bundleContext.getBundle();
-        if (reloadAnyway || thisBundle.getLastModified() < new File(thisBundle.getLocation()).lastModified()) {
+        if (reloadAnyway || thisBundle.getLastModified() < new File(thisBundle.getLocation().replaceFirst("^file:","")).lastModified()) {
             bundles.add(thisBundle);
         }
         if (bundles.isEmpty()) {
