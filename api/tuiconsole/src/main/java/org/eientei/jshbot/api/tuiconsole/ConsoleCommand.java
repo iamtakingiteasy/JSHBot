@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface ConsoleCommand {
     void setup(ConsoleCommandContext context);
-    void execute(List<String> arguments);
+    void execute(List<String> cmd, List<String> arguments);
 }

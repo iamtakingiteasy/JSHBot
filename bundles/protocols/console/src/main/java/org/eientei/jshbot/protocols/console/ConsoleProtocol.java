@@ -1,6 +1,7 @@
 package org.eientei.jshbot.protocols.console;
 
 import jline.console.ConsoleReader;
+import jline.console.history.History;
 import org.eientei.jshbot.api.dispatcher.Subscriber;
 import org.eientei.jshbot.api.dispatcher.SubscriberContext;
 import org.eientei.jshbot.api.message.Message;
@@ -13,7 +14,7 @@ import org.eientei.jshbot.protocols.console.commands.EchoCommand;
 import org.eientei.jshbot.protocols.console.commands.HelpCommand;
 import org.osgi.framework.BundleContext;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -46,11 +47,6 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
 
         bundleContext.registerService(ConsoleCommand.class, new EchoCommand(dispatcherService), null);
         bundleContext.registerService(ConsoleCommand.class, new HelpCommand(dispatcherService, commandTree), null);
-        // register commands
-        /*
-        builtinCommands.add(bundleContext.registerService(ConsoleCommand.class, new BundleCommand(dispatcherService, bundleContext), null));
-        builtinCommands.add(bundleContext.registerService(ConsoleCommand.class, new HelpCommand(dispatcherService, consoleCommands), null));
-        */
 
         try {
             consoleReader= new ConsoleReader(inputStream, System.out);
@@ -63,14 +59,59 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
             e.printStackTrace();
         }
 
-        inlineMessage("Shell started");
+        File historyFile = bundleContext.getDataFile("history");
+        if (!historyFile.exists()) {
+            try {
+                historyFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(historyFile));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                consoleReader.getHistory().add(line);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
     protected void deinitialize() {
         consoleCommandsListener.unregisterServiceListener();
         consoleCommandsListener.ungetAllServices();
-        inlineMessage("Shell stopped");
+        File historyFile = bundleContext.getDataFile("history");
+        BufferedWriter writer = null;
+        try {
+             writer = new BufferedWriter(new FileWriter(historyFile));
+            for (History.Entry item : consoleReader.getHistory()) {
+                writer.write(item.value().toString() + "\n");
+            }
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override
@@ -113,6 +154,7 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
         while ((message = messagequeue.poll()) != null) {
             wasMessages = true;
             inlineMessage(message.getText());
+            message.markDelivered();
         }
         return wasMessages;
     }
@@ -143,11 +185,11 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
                 new Thread() {
                     @Override
                     public void run() {
-                        finalN.getData().getCommand().execute(arguments);
+                        finalN.getData().getCommand().execute(finalN.getPath(),arguments);
                     }
                 }.start();
             } else {
-                n.getData().getCommand().execute(arguments);
+                n.getData().getCommand().execute(n.getPath(), arguments);
             }
         } else {
             String commandLine = ShellUtils.concat(keys);

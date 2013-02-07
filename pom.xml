@@ -11,5 +11,6 @@
     <module>core</module>
     <module>bundles</module>
     <module>distribution</module>
+    <module>lib</module>
   </modules>
 </project>

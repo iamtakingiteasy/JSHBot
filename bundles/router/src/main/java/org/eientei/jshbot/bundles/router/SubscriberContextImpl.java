@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +20,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class SubscriberContextImpl implements SubscriberContext {
     private int queueSize = 32;
     private ArrayBlockingQueue<Message> messageQueue = new ArrayBlockingQueue<Message>(queueSize,true);
-    private CopyOnWriteArrayList<URI> topics = new CopyOnWriteArrayList<URI>();
+    private ConcurrentSkipListSet<URI> topics = new ConcurrentSkipListSet<URI>();
     private Subscriber subscriber;
     private UUID uuid;
     private final Object monitor = new Object();
@@ -42,7 +42,7 @@ public class SubscriberContextImpl implements SubscriberContext {
                             monitor.wait();
                         } catch (InterruptedException e) {
                         }
-                        while ((message = messageQueue.poll()) != null && subscriber != null) {
+                        while (subscriber != null && (message = messageQueue.poll()) != null) {
                             subscriber.consume(message);
                         }
                     }
@@ -91,12 +91,14 @@ public class SubscriberContextImpl implements SubscriberContext {
     }
 
     public void shutdown() {
-        topics.clear();
         subscriber = null;
     }
 
     public void renew(Subscriber subscriber) {
         this.subscriber = subscriber;
+        synchronized (monitor) {
+            monitor.notify();
+        }
     }
 
     public UUID getUuid() {

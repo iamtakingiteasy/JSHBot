@@ -37,7 +37,7 @@ public class HelpCommand implements ConsoleCommand {
     }
 
     @Override
-    public void execute(List<String> arguments) {
+    public void execute(List<String> cmd, List<String> arguments) {
         List<Tree.Node<String,ConsoleCommandContext>> nodes = new ArrayList<Tree.Node<String, ConsoleCommandContext>>();
         traverse(nodes,commands.getRoot());
         StringBuilder sb = new StringBuilder();

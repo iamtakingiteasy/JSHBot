@@ -47,7 +47,7 @@ public class BundleInstall implements ConsoleCommand {
     }
 
     @Override
-    public void execute(List<String> arguments) {
+    public void execute(List<String> cmd, List<String> arguments) {
         if (arguments.isEmpty() || arguments.get(0).isEmpty()) {
             Message message = new Message("console://stdin", "console://stdout", "Empty installation path");
             dispatcherService.getOrWaitForServiceInstance().dispatch(message);

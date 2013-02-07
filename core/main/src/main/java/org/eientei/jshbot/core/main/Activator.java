@@ -25,6 +25,8 @@ public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         bundleContext = context;
 
+        if (bundleContext.getBundles().length > 2) return;
+
         System.out.println("JSHBot main started");
 
         String bundleRootPath = context.getProperty("bundleRoot");
@@ -61,7 +63,9 @@ public class Activator implements BundleActivator {
         for (Bundle b : bundles) {
             if (b.getHeaders().get(Constants.FRAGMENT_HOST) == null) {
                 System.out.println("Starting bundle: " + b.getSymbolicName());
-                b.start();
+                if (b.getState() != Bundle.ACTIVE) {
+                    b.start();
+                }
             }
         }
 
@@ -102,6 +106,7 @@ public class Activator implements BundleActivator {
 
     @Override
     public void stop(BundleContext context) throws Exception {
+        if (bundleContext.getBundles().length > 2) return;
         System.out.println("JSHBot main stopped");
     }
 }

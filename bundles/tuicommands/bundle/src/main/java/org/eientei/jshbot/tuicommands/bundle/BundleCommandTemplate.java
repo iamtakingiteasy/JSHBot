@@ -47,7 +47,7 @@ public abstract class BundleCommandTemplate implements ConsoleCommand {
     }
 
     @Override
-    public void execute(List<String> arguments) {
+    public void execute(List<String> cmd, List<String> arguments) {
         long bundleId = -1;
         if (arguments.size() > 0) {
             try {

@@ -24,6 +24,7 @@ public class BundleCommands extends GenericActivatorThread {
         bundleContext.registerService(ConsoleCommand.class, new BundleUpdate(bundleContext, dispatcherService), null);
         bundleContext.registerService(ConsoleCommand.class, new BundleUninstall(bundleContext, dispatcherService), null);
         bundleContext.registerService(ConsoleCommand.class, new BundleInstall(bundleContext, dispatcherService), null);
+        bundleContext.registerService(ConsoleCommand.class, new BundleReload(bundleContext, dispatcherService), null);
     }
 
     @Override

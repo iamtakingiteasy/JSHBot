@@ -39,7 +39,7 @@ public class BundleList implements ConsoleCommand {
     }
 
     @Override
-    public void execute(List<String> arguments) {
+    public void execute(List<String> cmd, List<String> arguments) {
         StringBuilder sb = new StringBuilder();
         Bundle[] bundles = bundleContext.getBundles();
         boolean first = true;

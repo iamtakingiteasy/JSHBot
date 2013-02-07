@@ -10,8 +10,8 @@ import org.osgi.framework.BundleContext;
  * Time: 18:35
  */
 public abstract class GenericActivatorThread extends Thread {
-    private boolean running;
-    private boolean waiting;
+    private volatile boolean running;
+    private volatile boolean waiting;
     private final Object monitor = new Object();
 
     protected BundleContext bundleContext;

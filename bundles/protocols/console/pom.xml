@@ -38,9 +38,9 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>jline</groupId>
+            <groupId>org.eientei.jshbot.lib</groupId>
             <artifactId>jline</artifactId>
-            <version>2.9</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -59,16 +59,11 @@
                             org.eientei.jshbot.api.message,
                             org.eientei.jshbot.bundles.utils,
                             org.eientei.jshbot.api.tuiconsole,
-                            jline.console.completer
+                            jline.*
                         </Import-Package>
-                        <Export-Package>
-                            jline.console.completer
-                        </Export-Package>
                         <Private-Package>
                             org.eientei.jshbot.protocols.console,
-                            org.eientei.jshbot.protocols.console.commands,
-                            jline.*,
-                            org.fusesource.*
+                            org.eientei.jshbot.protocols.console.commands
                         </Private-Package>
                         <Bundle-Activator>org.eientei.jshbot.protocols.console.Activator</Bundle-Activator>
                     </instructions>

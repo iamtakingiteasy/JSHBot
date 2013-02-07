@@ -32,7 +32,7 @@ public class EchoCommand implements ConsoleCommand {
     }
 
     @Override
-    public void execute(List<String> arguments) {
+    public void execute(List<String> cmd, List<String> arguments) {
         StringBuilder output = new StringBuilder();
         boolean first = true;
         for (String arg : arguments) {

@@ -56,9 +56,9 @@ public class BundleIdCompleter implements ConsoleCommandCompleter {
                 if (!match.startsWith(buffer)) {
                     break;
                 }
-                candidates.add(match);
+                candidates.add(match.substring(buffer.length()));
             }
         }
-        return candidates.isEmpty() ? -1 : 0;
+        return candidates.isEmpty() ? -1 : buffer.length();
     }
 }

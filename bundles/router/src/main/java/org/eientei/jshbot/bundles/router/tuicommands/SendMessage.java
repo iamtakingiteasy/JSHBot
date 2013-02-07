@@ -25,11 +25,11 @@ public class SendMessage implements ConsoleCommand {
     public void setup(ConsoleCommandContext context) {
         context.addMountPoint(new MountPoint("Sends a message manually",
                 null,true,
-                "subscribers", "send"));
+                "subscriber", "send"));
     }
 
     @Override
-    public void execute(List<String> arguments) {
+    public void execute(List<String> cmd, List<String> arguments) {
         if (arguments.size() < 3) {
             Message message = new Message("console://stdin", "console://stdout", "Not enough parameters for message, need three: <source> <dest> <body>");
             dispatcher.dispatch(message);

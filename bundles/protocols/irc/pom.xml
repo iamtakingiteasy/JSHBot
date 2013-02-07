@@ -3,15 +3,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.eientei.jshbot.tuicommands</groupId>
-    <artifactId>tuicommands</artifactId>
+    <groupId>org.eientei.jshbot.protocols</groupId>
+    <artifactId>protocols</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.eientei.jshbot.tuicommands</groupId>
-  <artifactId>bundle</artifactId>
+  <groupId>org.eientei.jshbot.protocols</groupId>
+  <artifactId>irc</artifactId>
   <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
-  <name>bundle</name>
+  <name>irc</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,23 +28,13 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.eientei.jshbot.bundles</groupId>
-            <artifactId>utils</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.eientei.jshbot.api</groupId>
             <artifactId>tuiconsole</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.eientei.jshbot.protocols</groupId>
-            <artifactId>console</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eientei.jshbot.lib</groupId>
-            <artifactId>jline</artifactId>
+            <groupId>org.eientei.jshbot.bundles</groupId>
+            <artifactId>utils</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
@@ -63,13 +53,12 @@
                             org.eientei.jshbot.api.dispatcher,
                             org.eientei.jshbot.api.message,
                             org.eientei.jshbot.bundles.utils,
-                            org.eientei.jshbot.api.tuiconsole,
-                            jline.console.completer
+                            org.eientei.jshbot.api.tuiconsole
                         </Import-Package>
                         <Private-Package>
-                            org.eientei.jshbot.tuicommands.bundle
+                            org.eientei.jshbot.protocols.irc
                         </Private-Package>
-                        <Bundle-Activator>org.eientei.jshbot.tuicommands.bundle.Activator</Bundle-Activator>
+                        <Bundle-Activator>org.eientei.jshbot.protocols.irc.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

@@ -32,14 +32,14 @@ public class SubscriberList implements ConsoleCommand {
     public void setup(ConsoleCommandContext context) {
         context.addMountPoint(new MountPoint("Operates with subscribers",
                 null,false,
-                "subscribers"));
+                "subscriber"));
         context.addMountPoint(new MountPoint("Lists subscribers on this dispatcher",
                 null,false,
-                "subscribers", "list"));
+                "subscriber", "list"));
     }
 
     @Override
-    public void execute(List<String> arguments) {
+    public void execute(List<String> cmd, List<String> arguments) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String,SubscriberContextImpl> entry: subscribers.entrySet()) {
             sb.append("    ");
