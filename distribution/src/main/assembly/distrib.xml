@@ -75,5 +75,17 @@
                 <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
             </binaries>
         </moduleSet>
+        <moduleSet>
+            <includeSubModules>true</includeSubModules>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>org.eientei.jshbot.connectors:*</include>
+            </includes>
+            <binaries>
+                <outputDirectory>distribution/bundles/connectors</outputDirectory>
+                <unpack>false</unpack>
+                <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
+            </binaries>
+        </moduleSet>
     </moduleSets>
 </assembly>

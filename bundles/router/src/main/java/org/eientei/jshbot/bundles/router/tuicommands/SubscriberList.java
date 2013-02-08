@@ -41,8 +41,18 @@ public class SubscriberList implements ConsoleCommand {
     @Override
     public void execute(List<String> cmd, List<String> arguments) {
         StringBuilder sb = new StringBuilder();
+        boolean first = true;
+
         for (Map.Entry<String,SubscriberContextImpl> entry: subscribers.entrySet()) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append("\n");
+            }
             sb.append("    ");
+            if (entry.getValue().isDetached()) {
+                sb.append("[DETACHED]    ");
+            }
             sb.append(entry.getValue().getUuid().toString());
             sb.append("    ");
             sb.append(entry.getKey());
@@ -52,7 +62,6 @@ public class SubscriberList implements ConsoleCommand {
                 sb.append(uri.toString());
                 sb.append("\n");
             }
-
         }
 
         Message message = new Message("console://stdin", "console://stdout", sb.toString());

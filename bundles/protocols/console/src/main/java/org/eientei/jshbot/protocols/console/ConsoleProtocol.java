@@ -8,8 +8,9 @@ import org.eientei.jshbot.api.message.Message;
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommandContext;
 import org.eientei.jshbot.api.tuiconsole.MountPoint;
-import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
+import org.eientei.jshbot.bundles.utils.GenericProducerThread;
 import org.eientei.jshbot.bundles.utils.GenericServiceListener;
+import org.eientei.jshbot.bundles.utils.InterruptableInputStream;
 import org.eientei.jshbot.protocols.console.commands.EchoCommand;
 import org.eientei.jshbot.protocols.console.commands.HelpCommand;
 import org.osgi.framework.BundleContext;
@@ -24,7 +25,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Date: 2013-02-04
  * Time: 15:31
  */
-public class ConsoleProtocol extends GenericActivatorThread implements Subscriber {
+public class ConsoleProtocol extends GenericProducerThread implements Subscriber {
     private ConsoleCommandServiceListener consoleCommandsListener;
     private InterruptableInputStream inputStream = new InterruptableInputStream(System.in);
     private String prompt = "JSHBot> ";
@@ -92,7 +93,7 @@ public class ConsoleProtocol extends GenericActivatorThread implements Subscribe
 
     @Override
     protected void deinitialize() {
-        subscriberContext.shutdown();
+        subscriberContext.detach();
 
         while (drainMessageQueue());
 

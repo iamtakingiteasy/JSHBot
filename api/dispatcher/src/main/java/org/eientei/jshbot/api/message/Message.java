@@ -20,6 +20,12 @@ public class Message {
         this.text = text;
     }
 
+    public Message(URI source, URI dest, String text) {
+        this.source = source;
+        this.dest = dest;
+        this.text = text;
+    }
+
     public URI getSource() {
         return source;
     }

@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
  * Date: 2013-02-03
  * Time: 18:35
  */
-public abstract class GenericActivatorThread extends Thread {
+public abstract class GenericProducerThread extends Thread {
     private volatile boolean running;
     private volatile boolean waiting;
     private final Object monitor = new Object();
@@ -17,12 +17,12 @@ public abstract class GenericActivatorThread extends Thread {
     protected BundleContext bundleContext;
     protected GenericSingularServiceListener<Dispatcher> dispatcherService;
 
-    public GenericActivatorThread(BundleContext bundleContext) {
+    public GenericProducerThread(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
         this.waiting = true;
     }
 
-    public GenericActivatorThread(BundleContext bundleContext, boolean waiting) {
+    public GenericProducerThread(BundleContext bundleContext, boolean waiting) {
         this.bundleContext = bundleContext;
         this.waiting = waiting;
     }
@@ -37,7 +37,7 @@ public abstract class GenericActivatorThread extends Thread {
         while (running) {
             doIterativeJob();
             if (waiting) {
-                try {
+                 try {
                     synchronized (monitor) {
                         monitor.wait();
                     }
@@ -69,13 +69,17 @@ public abstract class GenericActivatorThread extends Thread {
         }
     }
 
-    public void terminate() throws InterruptedException {
+    public void terminate() {
         if (running) {
             running = false;
             termination();
             interrupt();
             notifyMonitor();
-            join();
+            try {
+                join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

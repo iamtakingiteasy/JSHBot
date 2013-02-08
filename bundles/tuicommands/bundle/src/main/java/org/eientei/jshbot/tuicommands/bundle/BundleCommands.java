@@ -1,7 +1,7 @@
 package org.eientei.jshbot.tuicommands.bundle;
 
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
-import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
+import org.eientei.jshbot.bundles.utils.GenericProducerThread;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -10,7 +10,7 @@ import org.osgi.framework.BundleContext;
  * Date: 2013-02-06
  * Time: 18:47
  */
-public class BundleCommands extends GenericActivatorThread {
+public class BundleCommands extends GenericProducerThread {
     public BundleCommands(BundleContext bundleContext) {
         super(bundleContext);
     }

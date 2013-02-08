@@ -1,4 +1,4 @@
-package org.eientei.jshbot.protocols.irc;
+package org.eientei.jshbot.connectors.manager;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -6,17 +6,23 @@ import org.osgi.framework.BundleContext;
 /**
  * Created with IntelliJ IDEA.
  * User: Tumin Alexander
- * Date: 2013-02-08
- * Time: 19:47
+ * Date: 2013-02-07
+ * Time: 18:05
  */
 public class Activator implements BundleActivator {
+    private ConnectorManager connectorManager;
+
     @Override
     public void start(BundleContext context) throws Exception {
-        //To change body of implemented methods use File | Settings | File Templates.
+        connectorManager = new ConnectorManager(context);
+        connectorManager.start();
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if (connectorManager != null) {
+            connectorManager.terminate();
+        }
+        connectorManager = null;
     }
 }

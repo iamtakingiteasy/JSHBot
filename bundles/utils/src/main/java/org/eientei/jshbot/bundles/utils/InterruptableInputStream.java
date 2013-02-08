@@ -1,4 +1,4 @@
-package org.eientei.jshbot.protocols.console;
+package org.eientei.jshbot.bundles.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

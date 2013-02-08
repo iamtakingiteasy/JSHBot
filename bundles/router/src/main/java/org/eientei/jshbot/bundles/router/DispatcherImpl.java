@@ -6,7 +6,7 @@ import org.eientei.jshbot.api.message.Message;
 import org.eientei.jshbot.api.tuiconsole.ConsoleCommand;
 import org.eientei.jshbot.bundles.router.tuicommands.SendMessage;
 import org.eientei.jshbot.bundles.router.tuicommands.SubscriberList;
-import org.eientei.jshbot.bundles.utils.GenericActivatorThread;
+import org.eientei.jshbot.bundles.utils.GenericProducerThread;
 import org.eientei.jshbot.bundles.utils.GenericServiceListener;
 import org.osgi.framework.BundleContext;
 
@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
  * Date: 2013-02-03
  * Time: 06:41
  */
-public class DispatcherImpl extends GenericActivatorThread implements Dispatcher {
+public class DispatcherImpl extends GenericProducerThread implements Dispatcher {
     private Queue<Message> messageQueue = new ArrayBlockingQueue<Message>(32);
     private ConcurrentMap<String, SubscriberContextImpl> subscribers = new ConcurrentHashMap<String, SubscriberContextImpl>();
     private SubscriberServiceListener subscriberListener;
@@ -115,7 +115,7 @@ public class DispatcherImpl extends GenericActivatorThread implements Dispatcher
 
         @Override
         protected void removeService(Subscriber service, String serviceSymbolicName) {
-            subscribers.get(serviceSymbolicName).shutdown();
+            subscribers.get(serviceSymbolicName).detach();
         }
 
         @Override

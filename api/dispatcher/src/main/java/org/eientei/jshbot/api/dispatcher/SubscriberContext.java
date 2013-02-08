@@ -15,5 +15,5 @@ public interface SubscriberContext {
     Collection<URI> getTopics();
     public void setQueueSize(int size);
     public int getQueueSize();
-    public void shutdown();
+    public void detach();
 }

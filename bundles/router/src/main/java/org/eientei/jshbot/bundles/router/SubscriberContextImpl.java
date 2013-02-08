@@ -90,7 +90,7 @@ public class SubscriberContextImpl implements SubscriberContext {
         return subscriber;
     }
 
-    public void shutdown() {
+    public void detach() {
         subscriber = null;
     }
 
@@ -103,5 +103,9 @@ public class SubscriberContextImpl implements SubscriberContext {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public boolean isDetached() {
+        return subscriber == null;
     }
 }
