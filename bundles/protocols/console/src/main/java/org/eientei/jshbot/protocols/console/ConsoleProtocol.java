@@ -130,7 +130,7 @@ public class ConsoleProtocol extends GenericProducerThread implements Subscriber
 
                 if (line != null && !line.isEmpty()) {
                     try {
-                        evluate(line);
+                        evaluate(line);
                     } catch (Throwable e) {
                         e.printStackTrace();
                     }
@@ -165,7 +165,7 @@ public class ConsoleProtocol extends GenericProducerThread implements Subscriber
         return wasMessages;
     }
 
-    private void evluate(String line) {
+    private void evaluate(String line) {
         List<String> keys = ShellUtils.shellSplit(line);
         Tree.Node<String,ConsoleCommandContext> n = commandTree.getRoot();
         boolean traversing = true;

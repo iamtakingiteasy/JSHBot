@@ -17,5 +17,6 @@
     <module>protocols</module>
     <module>tuicommands</module>
     <module>connectors</module>
+    <module>service</module>
   </modules>
 </project>

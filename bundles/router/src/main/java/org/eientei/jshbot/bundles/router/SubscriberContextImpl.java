@@ -24,10 +24,15 @@ public class SubscriberContextImpl implements SubscriberContext {
     private Subscriber subscriber;
     private UUID uuid;
     private final Object monitor = new Object();
+    private boolean transientSubscriber = false;
+    private String serviceSymbolicName;
+    private DispatcherImpl dispatcher;
 
-    public SubscriberContextImpl(Subscriber subscriber, UUID uuid) {
+    public SubscriberContextImpl(Subscriber subscriber, UUID uuid, String serviceSymbolicName, DispatcherImpl dispatcher) {
         this.subscriber = subscriber;
         this.uuid = uuid;
+        this.serviceSymbolicName = serviceSymbolicName;
+        this.dispatcher = dispatcher;
         runConsumer();
     }
 
@@ -92,6 +97,21 @@ public class SubscriberContextImpl implements SubscriberContext {
 
     public void detach() {
         subscriber = null;
+        if (isTransient()) {
+            topics.clear();
+            messageQueue.clear();
+            dispatcher.removeSubscriber(serviceSymbolicName);
+        }
+    }
+
+    @Override
+    public void markTransient() {
+        transientSubscriber = true;
+        if (isDetached()) {
+            topics.clear();
+            messageQueue.clear();
+            dispatcher.removeSubscriber(serviceSymbolicName);
+        }
     }
 
     public void renew(Subscriber subscriber) {
@@ -107,5 +127,13 @@ public class SubscriberContextImpl implements SubscriberContext {
 
     public boolean isDetached() {
         return subscriber == null;
+    }
+
+    public boolean isTransient() {
+        return transientSubscriber;
+    }
+
+    public String getServiceSymbolicName() {
+        return serviceSymbolicName;
     }
 }

@@ -11,9 +11,7 @@ import org.eientei.jshbot.bundles.utils.GenericServiceListener;
 import org.osgi.framework.BundleContext;
 
 import java.net.URI;
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -30,7 +28,9 @@ public class DispatcherImpl extends GenericProducerThread implements Dispatcher 
     private ConcurrentMap<String, SubscriberContextImpl> subscribers = new ConcurrentHashMap<String, SubscriberContextImpl>();
     private SubscriberServiceListener subscriberListener;
     private Set<UUID> usedUUID = new ConcurrentSkipListSet<UUID>();
+    private DispatcherImpl thisInstance = this;
 
+    // todo: loops for currently undeliverable messages for a certain timeout, message resolving
 
     public DispatcherImpl(BundleContext context) {
         super(context);
@@ -87,10 +87,6 @@ public class DispatcherImpl extends GenericProducerThread implements Dispatcher 
                     context.addMessage(message);
                 }
             }
-
-            if (!message.wasDelivered()) {
-                // do anouncing message which wasn't delivered
-            }
         }
     }
 
@@ -105,6 +101,14 @@ public class DispatcherImpl extends GenericProducerThread implements Dispatcher 
         return result;
     }
 
+    public void removeSubscriber(String serviceSymbolicName) {
+        SubscriberContextImpl context = subscribers.get(serviceSymbolicName);
+        if (context != null && context.isTransient() && context.isDetached()) {
+            usedUUID.remove(context.getUuid());
+            subscribers.remove(serviceSymbolicName);
+        }
+    }
+
     private class SubscriberServiceListener extends GenericServiceListener<Subscriber> {
 
         public SubscriberServiceListener(BundleContext bundleContext) {
@@ -115,7 +119,10 @@ public class DispatcherImpl extends GenericProducerThread implements Dispatcher 
 
         @Override
         protected void removeService(Subscriber service, String serviceSymbolicName) {
-            subscribers.get(serviceSymbolicName).detach();
+            SubscriberContextImpl context = subscribers.get(serviceSymbolicName);
+            if (context != null) {
+                context.detach();
+            }
         }
 
         @Override
@@ -129,7 +136,7 @@ public class DispatcherImpl extends GenericProducerThread implements Dispatcher 
                     uuid = UUID.randomUUID();
                 }
 
-                context = new SubscriberContextImpl(service,uuid);
+                context = new SubscriberContextImpl(service,uuid, serviceSymbolicName, thisInstance);
                 subscribers.put(serviceSymbolicName, context);
             } else {
                 context.renew(service);

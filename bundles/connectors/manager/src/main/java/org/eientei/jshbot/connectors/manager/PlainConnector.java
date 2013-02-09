@@ -28,11 +28,13 @@ public class PlainConnector extends GenericProducerThread implements Subscriber 
     private SubscriberContext subscriberContext;
     private Queue<Message> messages = new LinkedBlockingQueue<Message>();
     private InterruptableInputStream interruptableStream;
+    private boolean transientConnection = false;
 
-    public PlainConnector(URI serverUri, BundleContext bundleContext) {
+    public PlainConnector(URI serverUri, BundleContext bundleContext, boolean transientConnection) {
         super(bundleContext,false);
         this.serverUri = serverUri;
         this.bundleContext = bundleContext;
+        this.transientConnection = transientConnection;
     }
 
 
@@ -125,5 +127,8 @@ public class PlainConnector extends GenericProducerThread implements Subscriber 
     public void registration(SubscriberContext subscriberContext) {
         this.subscriberContext = subscriberContext;
         subscriberContext.addTopic(serverUri.getScheme() + "-connector://" + serverUri.getAuthority());
+        if (transientConnection) {
+            subscriberContext.markTransient();
+        }
     }
 }

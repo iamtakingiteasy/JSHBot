@@ -13,7 +13,8 @@ public interface SubscriberContext {
     void addTopic(String uri);
     void removeTopic(String uri);
     Collection<URI> getTopics();
-    public void setQueueSize(int size);
-    public int getQueueSize();
-    public void detach();
+    void setQueueSize(int size);
+    int getQueueSize();
+    void detach();
+    void markTransient();
 }

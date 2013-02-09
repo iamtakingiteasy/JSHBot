@@ -10,13 +10,19 @@ import org.osgi.framework.BundleContext;
  * Time: 19:47
  */
 public class Activator implements BundleActivator {
+    private IrcManager ircManager;
+
     @Override
     public void start(BundleContext context) throws Exception {
-        //To change body of implemented methods use File | Settings | File Templates.
+        ircManager = new IrcManager(context);
+        ircManager.start();
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if (ircManager != null) {
+            ircManager.terminate();
+        }
+        ircManager = null;
     }
 }
