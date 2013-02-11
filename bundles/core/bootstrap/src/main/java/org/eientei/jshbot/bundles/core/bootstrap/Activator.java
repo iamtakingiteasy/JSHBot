@@ -23,7 +23,7 @@ public class Activator implements BundleActivator {
 
     private void populateBundleUrls(List<String> bundleUrls, File dir) {
         String relativeDirPath = dir.getAbsolutePath().replaceFirst(bundleRoot.getAbsolutePath(), "...");
-        System.out.println("Scanning tui directory: " + relativeDirPath);
+        System.out.println("Scanning directory: " + relativeDirPath);
 
 
         File[] files = dir.listFiles(new FileFilter() {
@@ -57,7 +57,7 @@ public class Activator implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         bundleContext = context;
 
-        if (bundleContext.getDataFile("bootstrapped").exists()) return;
+        if (bundleContext.getDataFile("bootstrapped").exists()) return;;
 
         String bundleRootPath = context.getProperty("bundleRoot");
         if (bundleRootPath == null) {

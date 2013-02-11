@@ -25,6 +25,50 @@
                 <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
             </binaries>
         </moduleSet>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>org.eientei.jshbot.bundles.api:*</include>
+            </includes>
+            <binaries>
+                <outputDirectory>distribution/bundles/api</outputDirectory>
+                <unpack>false</unpack>
+                <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
+            </binaries>
+        </moduleSet>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>org.eientei.jshbot.bundles.service:*</include>
+            </includes>
+            <binaries>
+                <outputDirectory>distribution/bundles/service</outputDirectory>
+                <unpack>false</unpack>
+                <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
+            </binaries>
+        </moduleSet>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>org.eientei.jshbot.bundles.utils:*</include>
+            </includes>
+            <binaries>
+                <outputDirectory>distribution/bundles/utils</outputDirectory>
+                <unpack>false</unpack>
+                <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
+            </binaries>
+        </moduleSet>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>org.eientei.jshbot.bundles.share:*</include>
+            </includes>
+            <binaries>
+                <outputDirectory>distribution/bundles/share</outputDirectory>
+                <unpack>false</unpack>
+                <outputFileNameMapping>${module.artifactId}.${module.extension}</outputFileNameMapping>
+            </binaries>
+        </moduleSet>
     </moduleSets>
     <fileSets>
         <fileSet>

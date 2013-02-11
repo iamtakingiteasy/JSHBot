@@ -4,26 +4,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eientei.jshbot.bundles</groupId>
-    <artifactId>core</artifactId>
+    <artifactId>api</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.eientei.jshbot.bundles.core</groupId>
-  <artifactId>bootstrap</artifactId>
+  <groupId>org.eientei.jshbot.bundles.api</groupId>
+  <artifactId>message</artifactId>
   <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
-  <name>bootstrap</name>
+  <name>message</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>4.3.1</version>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
@@ -35,14 +27,16 @@
                 <configuration>
                     <instructions>
                         <Import-Package>
-                            org.osgi.*
+                            org.eientei.jshbot.bundles.api.message,
+                            org.eientei.jshbot.bundles.api.message.annotations
                         </Import-Package>
-                        <Bundle-Activator>org.eientei.jshbot.bundles.core.bootstrap.Activator</Bundle-Activator>
-                        <Private-Package>org.eientei.jshbot.bundles.core.bootstrap</Private-Package>
+                        <Export-Package>
+                            org.eientei.jshbot.bundles.api.message,
+                            org.eientei.jshbot.bundles.api.message.annotations
+                        </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>

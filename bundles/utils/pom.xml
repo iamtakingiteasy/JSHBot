@@ -11,4 +11,9 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>utils</name>
+  <modules>
+    <module>tactivator</module>
+    <module>ithread</module>
+    <module>uri</module>
+  </modules>
 </project>
