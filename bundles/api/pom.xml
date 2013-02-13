@@ -14,5 +14,6 @@
   <modules>
     <module>message</module>
     <module>protocol</module>
+    <module>consolecommand</module>
   </modules>
 </project>

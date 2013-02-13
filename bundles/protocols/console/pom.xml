@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eientei.jshbot.bundles</groupId>
-    <artifactId>services</artifactId>
+    <artifactId>protocols</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.eientei.jshbot.bundles.service</groupId>
-  <artifactId>dispatcher</artifactId>
+  <groupId>org.eientei.jshbot.bundles.protocols</groupId>
+  <artifactId>console</artifactId>
   <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
-  <name>dispatcher</name>
+  <name>console</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,19 +29,39 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>org.eientei.jshbot.bundles.api</groupId>
+            <artifactId>protocol</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eientei.jshbot.bundles.api</groupId>
+            <artifactId>consolecommand</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.eientei.jshbot.bundles.utils</groupId>
             <artifactId>ithread</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.eientei.jshbot.bundles.utils</groupId>
-            <artifactId>uri</artifactId>
+            <artifactId>istreams</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eientei.jshbot.bundles.lib</groupId>
+            <artifactId>jline</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.ipojo.annotations</artifactId>
             <version>1.8.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.ipojo.api</artifactId>
+            <version>1.6.0</version>
         </dependency>
     </dependencies>
 
@@ -56,12 +76,20 @@
                     <instructions>
                         <Import-Package>
                             org.osgi.*,
+                            org.apache.felix.ipojo,
+                            org.apache.felix.ipojo.api,
                             org.eientei.jshbot.bundles.api.message,
                             org.eientei.jshbot.bundles.api.message.annotations,
+                            org.eientei.jshbot.bundles.api.protocol,
+                            org.eientei.jshbot.bundles.api.consolecommand,
                             org.eientei.jshbot.bundles.utils.ithread,
-                            org.eientei.jshbot.bundles.utils.uri
+                            org.eientei.jshbot.bundles.utils.istreams,
+                            jline,
+                            jline.console.completer,
+                            jline.console,
+                            jline.console.history
                         </Import-Package>
-                        <Private-Package>org.eientei.jshbot.bundles.services.dispatcher</Private-Package>
+                        <Private-Package>org.eientei.jshbot.bundles.protocols.console</Private-Package>
                     </instructions>
                 </configuration>
             </plugin>
@@ -79,5 +107,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

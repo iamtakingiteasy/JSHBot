@@ -8,4 +8,5 @@ package org.eientei.jshbot.bundles.api.message;
  */
 public interface SubscriberContext {
     public void dispatch(Message message);
+    public void detach();
 }

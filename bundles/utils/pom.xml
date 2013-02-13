@@ -15,5 +15,6 @@
     <module>tactivator</module>
     <module>ithread</module>
     <module>uri</module>
+    <module>istreams</module>
   </modules>
 </project>

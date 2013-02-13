@@ -67,7 +67,7 @@
                             org.eientei.jshbot.bundles.utils.ithread,
                             org.eientei.jshbot.bundles.utils.uri
                         </Import-Package>
-                        <Private-Package>org.eientei.jshbot.bundles.service.connectionmanager</Private-Package>
+                        <Private-Package>org.eientei.jshbot.bundles.services.connectionmanager</Private-Package>
                     </instructions>
                 </configuration>
             </plugin>

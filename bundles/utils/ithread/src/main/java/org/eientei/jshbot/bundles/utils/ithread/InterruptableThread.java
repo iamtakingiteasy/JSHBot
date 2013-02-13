@@ -50,6 +50,7 @@ public class InterruptableThread extends Thread {
     public final void terminate() {
         if (running) {
             running = false;
+            interrupt();
             wakeup();
             try {
                 join();
