@@ -2,22 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>jshbot-parent</artifactId>
+        <artifactId>bundles</artifactId>
         <groupId>org.eientei.jshbot</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.eientei.jshbot</groupId>
-    <artifactId>bundles</artifactId>
+    <groupId>org.eientei.jshbot.bundles</groupId>
+    <artifactId>services</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>bundles</name>
+    <name>services</name>
   <modules>
-    <module>api</module>
-    <module>core</module>
-    <module>lib</module>
-    <module>protocols</module>
-    <module>services</module>
-    <module>share</module>
-    <module>utils</module>
+    <module>dispatcher</module>
   </modules>
 </project>

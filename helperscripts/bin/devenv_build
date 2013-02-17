@@ -1,0 +1,22 @@
+#!/bin/sh
+
+prefix="devenv"
+
+find "$JSHBOT_ROOT/distribution/target/distribution-1.0-SNAPSHOT-distro/distribution-1.0-SNAPSHOT/distribution" -type f | 
+	sed 's|.*distribution/||;' | 
+		while read line; do 
+			outdir="${line%/*}"
+			bname="${line##*/}"
+			name="${bname%.*}"
+			mkdir -p "$prefix/$outdir"
+			if echo $line | grep -q "^bundles/lib"; then 
+				ln -s "$JSHBOT_ROOT/distribution/target/distribution-1.0-SNAPSHOT-distro/distribution-1.0-SNAPSHOT/distribution/$line" "$prefix/$outdir/$name.jar"
+			else 
+				if [ "${line%%/*}" = "core" ]; then
+					p="$HOME/.m2/repository/org/eientei/jshbot/bundles/${line%/*}/$name/1.0-SNAPSHOT/$name-1.0-SNAPSHOT.jar"
+				else
+					p="$HOME/.m2/repository/org/eientei/jshbot/${line%/*}/$name/1.0-SNAPSHOT/$name-1.0-SNAPSHOT.jar"
+				fi
+				ln -s "$p" "$prefix/$outdir/$name.jar"
+			fi
+		done

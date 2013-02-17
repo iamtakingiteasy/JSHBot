@@ -1,0 +1,92 @@
+#!/bin/sh
+
+projectDirName="JSHBot"
+
+if ! pwd | grep -q "${projectDirName}"; then
+	echo "You're not under project root"
+	echo "exiting"
+	exit 1
+fi
+
+groupIdBase="org.eientei.jshbot"
+groupIdSuffix="$(pwd | sed "s|.*${projectDirName}||;s|/|.|g")"
+groupId="${groupIdBase}${groupIdSuffix}"
+
+
+writePomXML() {
+(
+	set -f 
+	eval "set -- $@"
+   	node="$1"; shift
+	value="$1"; shift
+	path="$1"; shift
+	xml ed -L -N m=http://maven.apache.org/POM/4.0.0 \
+		-s "$path" -t elem -n "$node" -v "$value" \
+		"$name/pom.xml" ;
+)
+}
+
+error() {
+	echo "$@"
+	exit 1
+}
+
+createParentPom() {
+	for name in "$@"; do 	
+		mvn archetype:generate \
+			-DinteractiveMode=false \
+			-DarchetypeGroupId=org.codehaus.mojo.archetypes \
+			-DarchetypeArtifactId=pom-root \
+			-DgroupId=$groupId \
+			-DartifactId=$name \
+			-Dversion=1.0-SNAPSHOT ; 
+		tmp="$(xml fo -s 4 "$name/pom.xml")"
+		echo "$tmp" > "$name/pom.xml"
+		echo >> "$name/pom.xml"
+	done
+}
+
+createQuickStart() {
+	for name in "$@"; do
+		[ -e "$name" ] && error "$name: Alrady exists!"
+		package="${groupId}.${name}"
+		mvn archetype:generate \
+			-DinteractiveMode=false \
+			-DarchetypeGroupId=org.apache.maven.archetypes \
+			-DarchetypeArtifactId=maven-archetype-quickstart \
+			-DgroupId=$groupId \
+			-DartifactId=$name \
+			-Dversion=1.0-SNAPSHOT \
+			-Dpackage=$package ; 
+		rm -r $name/src/test;
+		xml ed -L -N m=http://maven.apache.org/POM/4.0.0 -d '/m:project/m:dependencies' $name/pom.xml 
+		while read line; do
+			if [ x"$line" != "x" ]; then
+				writePomXML "$line"
+			fi
+		done <<PLUGS
+			build           ''                    /m:project
+			plugins         ''                    /m:project/m:build
+			plugin          ''                    /m:project/m:build/m:plugins
+			groupId         'org.apache.felix'    /m:project/m:build/m:plugins/m:plugin
+			artifactId      'maven-bundle-plugin' /m:project/m:build/m:plugins/m:plugin
+			version         '2.3.7'               /m:project/m:build/m:plugins/m:plugin
+			extensions      'true'                /m:project/m:build/m:plugins/m:plugin
+			configuration   ''                    /m:project/m:build/m:plugins/m:plugin
+			instructions    ''                    /m:project/m:build/m:plugins/m:plugin/m:configuration
+			Private-Package '${package}'          /m:project/m:build/m:plugins/m:plugin/m:configuration/m:instructions
+PLUGS
+		tmp="$(xml fo -s 4 "$name/pom.xml")"
+		echo "$tmp" > "$name/pom.xml"
+		echo >> "$name/pom.xml"
+	done
+}
+
+cmd="$1"; shift
+
+case "$cmd" in
+	"root")  createParentPom  "$@"; ;;
+	"quick") createQuickStart "$@"; ;;
+	*) echo "Correct cmds are: 'root <module names>' and 'quick <module names>'"; ;;
+esac
+
