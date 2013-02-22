@@ -11,5 +11,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>lib</name>
+  <modules>
+    <module>jline</module>
+  </modules>
 </project>
-

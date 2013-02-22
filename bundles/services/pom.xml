@@ -13,5 +13,6 @@
     <name>services</name>
   <modules>
     <module>dispatcher</module>
+    <module>connmanager</module>
   </modules>
 </project>

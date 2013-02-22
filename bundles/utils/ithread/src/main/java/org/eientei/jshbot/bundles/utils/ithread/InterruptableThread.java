@@ -45,11 +45,17 @@ public abstract class InterruptableThread extends Thread {
         deinitialize();
     }
 
-    public final void terminate() {
-        if (running) {
+    protected final void requestStop() {
+        if (isRunning()) {
             running = false;
             interrupt();
             wakeup();
+        }
+    }
+
+    public final void terminate() {
+        if (running) {
+            requestStop();
             try {
                 join();
             } catch (InterruptedException e) {

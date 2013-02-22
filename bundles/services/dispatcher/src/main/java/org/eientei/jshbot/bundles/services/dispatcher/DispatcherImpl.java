@@ -2,6 +2,7 @@ package org.eientei.jshbot.bundles.services.dispatcher;
 
 import org.apache.felix.ipojo.annotations.*;
 import org.eientei.jshbot.bundles.api.message.Dispatcher;
+import org.eientei.jshbot.bundles.api.message.MessageType;
 import org.eientei.jshbot.bundles.api.message.Result;
 import org.eientei.jshbot.bundles.api.message.Subscriber;
 import org.eientei.jshbot.bundles.utils.ithread.InterruptableThread;
@@ -32,6 +33,7 @@ public class DispatcherImpl extends InterruptableThread implements Dispatcher {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     public DispatcherImpl() {
+        System.out.println("EHLO");
         setName("Message Dispatcher thread");
         setTimeoutable(true);
         setTimeout(100);
@@ -44,12 +46,13 @@ public class DispatcherImpl extends InterruptableThread implements Dispatcher {
     }
 
     @Bind(aggregate = true, optional = true)
-    private void bundSubscriber(Subscriber subscriber, ServiceReference<Subscriber> ref) {
+    private void bindSubscriber(Subscriber subscriber, ServiceReference<Subscriber> ref) {
         SubscriberId id = new SubscriberId(subscriber,ref);
         SubscriberContext context = subscribers.get(id);
         if (context == null) {
             context = new SubscriberContext(this);
             context.start();
+            subscribers.put(id,context);
         }
         context.unpause(subscriber);
     }
@@ -66,6 +69,7 @@ public class DispatcherImpl extends InterruptableThread implements Dispatcher {
 
     @PostRegistration
     public void registration(ServiceReference ref) {
+        System.out.println("EHLOI");
         start();
     }
 
@@ -108,15 +112,15 @@ public class DispatcherImpl extends InterruptableThread implements Dispatcher {
     }
 
     @Override
-    public <T> Result<T> send(T data, String topic) {
-        return send(data,topic,defaultTTL);
+    public <T> Result<T> send(T data, MessageType<T> type, String topic) {
+        return send(data,type,topic,defaultTTL);
     }
 
     @Override
-    public <T> Result<T> send(T data, String topic, long ttl) {
+    public <T> Result<T> send(T data, MessageType<T> type, String topic, long ttl) {
         if (ttl > maxTTL) ttl = maxTTL;
         ResultImpl<T> result = new ResultImpl<T>(ttl);
-        MessageImpl<T> message = new MessageImpl<T>(data, URI.create(topic),result);
+        MessageImpl<T> message = new MessageImpl<T>(data, type, URI.create(topic),result);
 
         enqueue(message);
 

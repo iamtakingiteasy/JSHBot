@@ -1,6 +1,7 @@
 package org.eientei.jshbot.bundles.services.dispatcher;
 
 import org.eientei.jshbot.bundles.api.message.Message;
+import org.eientei.jshbot.bundles.api.message.MessageType;
 
 import java.net.URI;
 
@@ -12,18 +13,20 @@ import java.net.URI;
  */
 public class MessageImpl<T> implements Message<T> {
     private final T messageData;
+    private final MessageType<T> type;
     private final URI topicURI;
     private final ResultImpl<T> senderResult;
 
 
-    public MessageImpl(T messageData, URI topicURI, ResultImpl<T> senderResult) {
+    public MessageImpl(T messageData, MessageType<T> type, URI topicURI, ResultImpl<T> senderResult) {
         this.messageData = messageData;
+        this.type = type;
         this.topicURI = topicURI;
         this.senderResult = senderResult;
     }
 
-    public String getDataClassName() {
-        return messageData.getClass().getName();
+    public MessageType<T> getDataTypeToken() {
+        return type;
     }
 
     public void markDelivered() {

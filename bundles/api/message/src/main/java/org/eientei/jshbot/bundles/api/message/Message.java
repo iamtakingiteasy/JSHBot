@@ -10,6 +10,13 @@ import java.net.URI;
  */
 public interface Message<T> {
     /**
+     * Fetches data attached to the message
+     *
+     * @return attached data
+     */
+    T data();
+
+    /**
      * Fetches topic of this message
      *
      * @return URI of topic

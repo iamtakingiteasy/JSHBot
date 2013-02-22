@@ -15,15 +15,13 @@ import java.lang.annotation.Target;
  *
  * void name();
  * void name(T data);
+ * void name(Message<T> message)
  * void name(T data, Message<T> message)
  * void name(Message<T> message, T data)
- *
- * the `T data` argument is required due to erasure
- *
- * alternatively, you could use @ReceivesType annotation
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Receives {
     String[] value();
+    Class typeToken();
 }

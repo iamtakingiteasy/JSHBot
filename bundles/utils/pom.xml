@@ -14,5 +14,8 @@
   <modules>
     <module>ithread</module>
     <module>uri</module>
+    <module>istream</module>
+    <module>tree</module>
+    <module>shell</module>
   </modules>
 </project>
